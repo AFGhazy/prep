@@ -3,7 +3,27 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// 57
+// https://leetcode.com/problems/rectangle-area/submissions/
+int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        int x1 = max(A, E);
+        int x2 = min(C, G);
+        int y1 = max(B, F);
+        int y2 = min(D, H);
+
+        int area = (x2-x1) * (y2-y1);
+        if(x1 > x2 || y1 > y2) area = 0;
+        return (C-A) * (D-B) - area + (G-E) * (H-F);
+    }
+
+// https://leetcode.com/problems/rectangle-overlap/submissions/
+bool isRectangleOverlap(vector<int>& rec1, vector<int>& rec2) {
+        int x1 = max(rec1[0], rec2[0]);
+        int x2 = min(rec1[2], rec2[2]);
+        int y1 = max(rec1[1], rec2[1]);
+        int y2 = min(rec1[3], rec2[3]);
+
+        return x1 < x2 && y1 < y2;
+    }
 
 
 bool isPalindrome(int x) {
