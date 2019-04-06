@@ -2,6 +2,21 @@
 using namespace std;
 
 
+
+
+vector<int> enumrateAllPrimes(const int & n) {
+    bitset<1000005> isPrime;
+    isPrime.set();
+    isPrime[0] = isPrime[1] = 0;
+    vector<int> primes;
+    for(int i = 2; i <= n / i; ++i) if(isPrime[i]) {
+        int j = i + i;
+        while(j <= n) isPrime[j] = false, j += i;
+    }
+    for(int i = 1; i <= n; ++i) if(isPrime[i]) primes.push_back(i);
+    return primes;
+}
+
 int maxProfit(vector<int> & v) {
     if(v.empty()) return 0;
 
@@ -12,6 +27,26 @@ int maxProfit(vector<int> & v) {
         mxProfit = max(v[i] - mn, mxProfit);
     }
     return mxProfit;
+}
+
+int maxProfit2(vector<int> & v) {
+    if(v.empty()) return 0;
+
+    vector<int> mxProfit(v.size(), 0);
+    int mn = v[0];
+    for(int i =0; i < v.size(); ++i) {
+        mn = min(mn, v[i]);
+        if(i > 0) mxProfit[i] = mxProfit[i - 1];
+        mxProfit[i] = max(v[i] - mn, mxProfit[i]);
+    }
+
+    int mxProfitB = 0;
+    int mx = v.back();
+    for(int i = v.size() - 1; i >= 0; --i) {
+        mx = max(mx, v[i]);
+        mxProfitB = max(mx - v[i] + (i ? mxProfit[i - 1] : 0), mxProfitB);
+    }
+    return mxProfitB;
 }
 
 int removeDuplicates(vector<int>& a) {
@@ -125,6 +160,19 @@ void addOne(vector<int> & v) {
     reverse(v.begin(), v.end());
 }
 
+// O(n^2) approach by taking the left most element as the starting point of traversal
+void permute(vector<int> & v, vector<int> & p) {
+    for(int i = 0; i < v.size(); ++i) {
+        int nxt = i;
+        while(nxt >= 0) {
+            swap(v[i], v[nxt]);
+            int tmp = p[nxt];
+            p[nxt] -= v.size();
+            nxt = tmp;
+        }
+    }
+}
+
 void test() {
 //    array<int, 5> a = {1, 2, 5, 7, 9};
 //
@@ -160,11 +208,24 @@ void test() {
 
 //    print(multiply({'-', '7', '6', '1', '8', '3', '8', '2', '5', '7', '2', '8', '7'}, {'1', '9', '3', '7', '0', '7', '7', '2', '1'}));
 
-    cout << canJump({3, 3, 1, 0, 2, 0, 1}) << endl;
-    cout << canJump({3, 2, 0, 0, 2, 0, 1}) << endl;
+//    cout << canJump({3, 3, 1, 0, 2, 0, 1}) << endl;
+//    cout << canJump({3, 2, 0, 0, 2, 0, 1}) << endl;
+//
+//    vector<int> a = {1, 1, 5, 5, 7, 7, 9, 9, 9, 10};
+//    cout << removeDuplicates(a) << endl;
+//    print(a);
+//vector<int> v = enumrateAllPrimes(2017);
+//    print(v);
+//    int acc = accumulate(v.begin(), v.end(), 0, [](int sum, int a) -> int {
+//               return sum + (a & 1 ? a : 0);
+//               });
+//    print(enumrateAllPrimes(acc));
+//    cout << acc << endl;
 
-    vector<int> a = {1, 1, 5, 5, 7, 7, 9, 9, 9, 10};
-    cout << removeDuplicates(a) << endl;
+    vector<int> a = {1, 2, 3, 4};
+    vector<int> v = {1, 2, 3, 0};
+
+    permute(a, v);
     print(a);
 }
 

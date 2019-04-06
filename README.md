@@ -48,6 +48,21 @@ first element greater than the value
 length of the longest subarray with equal elements
 </summary>
 
+
+</details>
+
+<details>
+<summary>
+sell and buy stocks at most twice with max profit in O(n) and O(1) space
+</summary>
+
 first element greater than the value
+
+</details>
+
+<details>
+<summary>
+Given an array A of integers representing a permutation update A to represent the inverse using constant additional space.
+</summary>
 
 </details>
