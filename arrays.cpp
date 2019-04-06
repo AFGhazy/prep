@@ -1,6 +1,49 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+
+int maxProfit(vector<int> & v) {
+    if(v.empty()) return 0;
+
+    int mxProfit = 0;
+    int mn = v[0];
+    for(int i =0; i < v.size(); ++i) {
+        mn = min(mn, v[i]);
+        mxProfit = max(v[i] - mn, mxProfit);
+    }
+    return mxProfit;
+}
+
+int removeDuplicates(vector<int>& a) {
+    int sz = 0;
+        for(int i = 0; i < a.size(); ++i) {
+            if(!i || a[i-1] != a[i])  a[sz++] = a[i];
+        }
+        return sz;
+    }
+
+// https://leetcode.com/problems/jump-game/
+bool canJump(const vector<int>& nums) {
+    int mx = 0;
+    bool ret = true;
+//     for_each(nums.begin(), nums.end(), [&mx, &ret](const int & a) -> void {
+//              if(mx < 0) ret = false;
+//              mx = max(mx, a);
+//              mx--;
+//              });
+//
+//              return ret;
+
+
+              for(int i = 0; i <= mx && i <= nums.size() - 1; ++i) {
+                mx = max(i + nums[i], mx);
+              }
+
+              return mx >= nums.size() - 1;
+
+
+    }
+
 void print(vector<int> a) {
 for_each(a.begin(), a.end(), [](const int & cur) -> void {
         cout << cur << " ";
@@ -115,7 +158,14 @@ void test() {
 //    print(t);
 
 
-    print(multiply({'-', '7', '6', '1', '8', '3', '8', '2', '5', '7', '2', '8', '7'}, {'1', '9', '3', '7', '0', '7', '7', '2', '1'}));
+//    print(multiply({'-', '7', '6', '1', '8', '3', '8', '2', '5', '7', '2', '8', '7'}, {'1', '9', '3', '7', '0', '7', '7', '2', '1'}));
+
+    cout << canJump({3, 3, 1, 0, 2, 0, 1}) << endl;
+    cout << canJump({3, 2, 0, 0, 2, 0, 1}) << endl;
+
+    vector<int> a = {1, 1, 5, 5, 7, 7, 9, 9, 9, 10};
+    cout << removeDuplicates(a) << endl;
+    print(a);
 }
 
 int main() {

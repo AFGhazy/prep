@@ -1,9 +1,4 @@
-# EPI 64
-
-<details>
-<summary>
-primary types
-</summary>
+# EPI 69
 
 
 <details>
@@ -45,5 +40,14 @@ upper bound
 first element greater than the value
 
 </details>
+
+</details>
+
+<details>
+<summary>
+length of the longest subarray with equal elements
+</summary>
+
+first element greater than the value
 
 </details>
