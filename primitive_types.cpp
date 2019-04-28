@@ -69,6 +69,24 @@ unsigned long long multiply(unsigned long long x, unsigned long long y) {
     return sum;
 }
 
+int concatNum(int d, int n) {
+    int ret = 0;
+    while(n) { ret *= 10, ret += d, --n;  }
+    return ret;
+}
+
+bool checkConcatenatedSum(int num, int catlen) {
+    int tmpNum = num;
+    int sum = 0;
+    cout << num << endl;
+    while(tmpNum) {
+        sum += concatNum(tmpNum % 10, catlen), tmpNum /= 10;
+        cout << sum << endl;
+    }
+    cout << endl;
+    return sum == num;
+}
+
 void test() {
 //    cout << numeric_limits<float>::max() << endl;
 //    cout << numeric_limits<float>::min() << endl;
@@ -85,6 +103,11 @@ void test() {
 //    cout << parity(5) << endl;
 
     cout << multiply(10, 11) << endl;
+    cout << checkConcatenatedSum(198, 2) << endl;
+    cout << checkConcatenatedSum(2997, 3) << endl;
+    cout << checkConcatenatedSum(198, 3) << endl;
+    cout << checkConcatenatedSum(13332, 4) << endl;
+    cout << checkConcatenatedSum(9, 1) << endl;
 }
 
 int main() {

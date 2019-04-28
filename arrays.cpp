@@ -173,6 +173,25 @@ void permute(vector<int> & v, vector<int> & p) {
     }
 }
 
+int maxSubArray(const vector<int>& v) {
+    int mx = numeric_limits<int>::min();
+    int sum = 0;
+    for(int i = 0; i < v.size(); ++i) {
+        sum += v[i];
+        mx = max(sum, mx);
+        if(sum < 0) sum = 0;
+    }
+    return mx;
+}
+
+bool isSequenceArray(const vector<int> & v, const int & m, const int & n) {
+    for(int i = 0; i < v.size(); ++i) {
+        if(v[i] < m || v[i] > n) return false;
+        if(i && v[i] < v[i - 1]) return false;
+    }
+    return true;
+}
+
 void test() {
 //    array<int, 5> a = {1, 2, 5, 7, 9};
 //
@@ -227,6 +246,11 @@ void test() {
 
     permute(a, v);
     print(a);
+    cout << maxSubArray({-2,1,-3,4,-1,2,1,-5,4}) << endl;
+    cout << isSequenceArray({1,2,3,4,5}, 1, 5) << endl;
+    cout << isSequenceArray({-5, -5, -5, -4, -4, -3, -3, -2, -2}, -5, -2) << endl;
+    cout << isSequenceArray({0, 1, 2, 3, 4, 5}, 1, 5) << endl;
+
 }
 
 int main() {
