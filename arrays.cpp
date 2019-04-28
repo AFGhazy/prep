@@ -192,6 +192,26 @@ bool isSequenceArray(const vector<int> & v, const int & m, const int & n) {
     return true;
 }
 
+int totalFruit(const vector<int>& tree) {
+    unordered_map<int, int> trees_so_far;
+    int start_index = 0, end_index = 0;
+    int mx = 0;
+    while(end_index < tree.size()) {
+            cout << start_index << " " << end_index << " " << trees_so_far.size() << " " << mx << endl;
+        if(trees_so_far.size() > 2) {
+            trees_so_far[tree[start_index]]--;
+            if(trees_so_far[tree[start_index]] == 0) trees_so_far.erase(tree[start_index]);
+            start_index++;
+        } else {
+            trees_so_far[tree[end_index]]++;
+            if(trees_so_far.size() <= 2) mx = max(mx, end_index - start_index + 1);
+            end_index++;
+        }
+
+    }
+    return mx;
+}
+
 void test() {
 //    array<int, 5> a = {1, 2, 5, 7, 9};
 //
@@ -251,7 +271,11 @@ void test() {
     cout << isSequenceArray({-5, -5, -5, -4, -4, -3, -3, -2, -2}, -5, -2) << endl;
     cout << isSequenceArray({0, 1, 2, 3, 4, 5}, 1, 5) << endl;
 
+    cout << totalFruit({3,3,3,1,2,1,1,2,3,3,4}) << endl;
+
 }
+
+
 
 int main() {
     test();
