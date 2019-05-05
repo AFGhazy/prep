@@ -1,7 +1,25 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-
+int maxProduct(vector<int>& nums) {
+    int cur = 1, curNeg = 1;
+    int mx = numeric_limits<int>::min();
+    for(int i = 0; i < nums.size(); ++i) {
+        
+        if(nums[i] == 0) {
+            cur = 1, curNeg = 1;
+            mx = max(mx, 0);
+        } else {
+            cur *= nums[i];
+            mx = max(mx, cur);
+            mx = max(mx, cur / curNeg);
+            if(curNeg > 0) {
+                curNeg *= nums[i];
+            }
+        }
+    }
+    return mx;
+}
 
 
 vector<int> enumrateAllPrimes(const int & n) {
