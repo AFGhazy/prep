@@ -74,6 +74,21 @@ int change(int amount, vector<int>& coins) {
     return sol;
 }
 
+int coinChange(vector<int>& coins, int amount) {
+        vector<vector<int>> dp(2, vector<int>(amount + 1, 0));
+
+    for(int i = 0; i < coins.size(); ++i) {
+        for(int j = 0; j <= amount; ++j) {
+            if(!i&&!j) continue; 
+            
+            dp[i % 2][j] = min((i > 0 ? dp[(i-1)%2][j] : numeric_limits<int>::max()), (j >= coins[i] && dp[i%2][j - coins[i]] != numeric_limits<int>::max() ? 1 + dp[i%2][j - coins[i]] : numeric_limits<int>::max()));
+
+        }
+    }
+        int sol = dp[(coins.size() - 1) % 2][amount];
+    return sol == numeric_limits<int>::max() ? -1 : sol;
+    }
+
 void test() {
     cout << fib(1) << endl;
     cout << fib(8) << endl;
