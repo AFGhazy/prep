@@ -89,6 +89,27 @@ int coinChange(vector<int>& coins, int amount) {
     return sol == numeric_limits<int>::max() ? -1 : sol;
     }
 
+int uniquePaths_(int m, int n) {
+        vector<vector<int>> dp(m, vector<int>(n, 1));
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+    int uniquePaths(int m, int n) {
+        vector<vector<int>> dp(2, vector<int>(n + 1, 0));
+        dp[0][1] = 1;
+        for(int i = 1; i <= m; ++i) {
+            for(int j = 1; j <= n; ++j) {
+                dp[i % 2][j] = dp[(i - 1) % 2][j] + dp[i % 2][j - 1];
+            }
+        }
+        return dp[m % 2][n];
+    }
+
 int minDistance(string word1, string word2) {
 int n = word1.size();
         int m = word2.size();
