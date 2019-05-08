@@ -140,6 +140,17 @@ int n = word1.size();
         return dp[n % 2][m];
 }
 
+int comb(int n, int r) {
+    vector<vector<int> > dp(2, vector<int>(r + 1, 1));
+
+    for(int i = 1; i <= n; ++i) {
+        for(int j = 1; j < i; ++j) {
+            dp[i % 2][j] = dp[(i - 1) % 2][j - 1] + dp[(i - 1) % 2][j];
+        }
+    }
+    return dp[n % 2][r];
+}
+
 void test() {
     cout << fib(1) << endl;
     cout << fib(8) << endl;
@@ -150,7 +161,11 @@ void test() {
     cout << fibIterative(8) << endl;
     cout << fibIterative(3) << endl;
     cout << fibIterative(30) << endl;
-    cout << coinChange({19,28,176,112,30,260,491,128,70,137,253}, 8539);
+    // cout << coinChange({19,28,176,112,30,260,491,128,70,137,253}, 8539);
+
+    cout << comb(3, 2) << endl;
+    cout << comb(10, 3) << endl;
+    cout << comb(20, 3) << endl;
 }
 
 int main() {
