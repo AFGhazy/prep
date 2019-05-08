@@ -151,6 +151,46 @@ int comb(int n, int r) {
     return dp[n % 2][r];
 }
 
+bool exist(vector<vector<char>> & board, const string & word, const int & i, const int & j, 
+              const int & k) {
+        if(k == word.size()) return true;
+        if(i < 0 || i >= board.size()) return false;
+        if(j < 0 || i >= board[0].size()) return false;       
+    
+        
+        int ret = (board[i][j] == word[k]);
+        char tmp = board[i][j];
+        board[i][j] = '*';
+        ret = ret && (
+            exist(board, word, i + 1, j, k + 1) ||
+            exist(board, word, i - 1, j, k + 1) ||
+            exist(board, word, i, j + 1, k + 1) ||
+            exist(board, word, i, j - 1, k + 1)
+        );
+        board[i][j] = tmp;
+        
+        return ret;
+    }
+    
+    bool exist(vector<vector<char>>& board, string word) {
+
+        
+        
+        bool ret = false;
+        for(int i = 0; i < board.size(); ++i) {
+            for(int j = 0; j < board[0].size(); ++j) {
+                ret |= exist(board, word, i, j, 0);
+            }
+        }
+        return ret;
+    }
+
+struct HashTuple {
+    size_t operator() (const tuple<int, int, int>& t) const {
+        return hash<int>()(get<0>(t) ^ get<1>(t) * 1021 ^ get<2>(t) * 1048573);
+    }
+};
+
 void test() {
     cout << fib(1) << endl;
     cout << fib(8) << endl;
