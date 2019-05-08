@@ -191,6 +191,37 @@ struct HashTuple {
     }
 };
 
+struct Clock {
+    int weight;
+    int price;
+
+    public:
+    Clock(int weight, int price) : price(price), weight(weight) {}
+};
+
+int knapsack(vector<vector<int> > & dp, const vector<Clock> & clocks, const int & totalWeight, const int & index) {
+    if(totalWeight < 0) return numeric_limits<int>::min();
+    if(index == clocks.size()) return 0;
+
+    int & ret = dp[totalWeight][index];
+
+    if(ret != -1) return ret;
+
+    ret = max(clocks[index].price + knapsack(dp, clocks, totalWeight - clocks[index].weight, index + 1) 
+    , knapsack(dp, clocks, totalWeight, index + 1));
+    return ret;
+}
+
+int knapsackIterative(const vector<Clock> & clocks, const int & totalWeight) {
+    vector<int> dp(totalWeight + 1, 0);
+    for(int i = 0; i < clocks.size(); ++i) {
+        for(int j = totalWeight; j >= clocks[i].weight; --j) {
+            dp[j] = max(dp[j - clocks[i].weight] + clocks[i].price, dp[j]);
+        }
+    }
+    return dp[totalWeight];
+}
+
 void test() {
     cout << fib(1) << endl;
     cout << fib(8) << endl;
@@ -206,6 +237,12 @@ void test() {
     cout << comb(3, 2) << endl;
     cout << comb(10, 3) << endl;
     cout << comb(20, 3) << endl;
+
+    int totalWeight = 10;
+    vector<Clock> v = {Clock(3, 7), Clock(8, 8), Clock(6, 4)};
+    vector<vector<int>> dp(totalWeight + 1, vector<int>(v.size(), -1));
+    cout << knapsack(dp, v, totalWeight, 0) << endl;
+    cout << knapsackIterative(v, totalWeight) << endl;
 }
 
 int main() {
