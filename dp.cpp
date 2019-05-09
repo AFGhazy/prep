@@ -140,6 +140,57 @@ int n = word1.size();
         return dp[n % 2][m];
 }
 
+ const int p1 = 999907;
+ const int p2 = 999917;
+ const int cp = 31;
+    
+ bool solveWordBreak(vector<int> & dp, const string & s, int i, const unordered_set<int> & dict1, 
+const unordered_set<int> & dict2) {
+    if(i == s.size()) return true;
+        
+    int h1 = 0;
+    int h2 = 0;
+
+    int & found = dp[i];
+    if(found != -1) return found;
+        
+    found = 0;
+
+    for(int j = i; j < s.size(); ++j) {
+        h1 = ((h1 + s[j] - 'a' + 1) * cp) % p1;
+        h2 = ((h2 + s[j] - 'a' + 1) * cp) % p2;
+
+        
+        if(dict1.count(h1) && dict2.count(h2)) {
+            found |= solveWordBreak(dp, s, j + 1, dict1, dict2);
+        }
+    }
+    return found;
+}
+
+bool wordBreak(string s, const vector<string> & dict) {
+    
+    unordered_set<int> dict1;
+    unordered_set<int> dict2;
+    vector<int> dp(s.size(), -1);
+
+    for(auto s: dict) {
+        int h1 = 0;
+        int h2 = 0;
+        for(int i = 0; i < s.size(); ++i) {
+            h1 = ((h1 + s[i] - 'a' + 1) * cp) % p1;
+            h2 = ((h2 + s[i] - 'a' + 1) * cp) % p2;
+        }
+
+        dict1.insert(h1);
+        dict2.insert(h2);
+    }
+
+    return solveWordBreak(dp, s, 0, dict1, dict2);
+    
+    
+}
+
 int comb(int n, int r) {
     vector<vector<int> > dp(2, vector<int>(r + 1, 1));
 
