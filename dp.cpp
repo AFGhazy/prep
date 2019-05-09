@@ -140,12 +140,20 @@ int n = word1.size();
         return dp[n % 2][m];
 }
 
- const int p1 = 999907;
- const int p2 = 999917;
- const int cp = 31;
+
+
+class WordBreakSolution {
+public:
     
- bool solveWordBreak(vector<int> & dp, const string & s, int i, const unordered_set<int> & dict1, 
-const unordered_set<int> & dict2) {
+    static const int p1 = 999907;
+static const int p2 = 999917;
+static const int cp = 31;
+    
+    
+    
+    static bool solveWordBreak(vector<int> & dp, const string & s, int i, const unordered_set<int> & dict1, 
+const unordered_set<int> & dict2,
+                              vector<vector<bool> > & sol) {
     if(i == s.size()) return true;
         
     int h1 = 0;
@@ -162,17 +170,36 @@ const unordered_set<int> & dict2) {
 
         
         if(dict1.count(h1) && dict2.count(h2)) {
-            found |= solveWordBreak(dp, s, j + 1, dict1, dict2);
+            bool cur = solveWordBreak(dp, s, j + 1, dict1, dict2, sol);
+            found |= cur;
+            sol[i][j] = cur;
+            // cout << "<<" << i << " " << j << " " << cur << endl;
         }
     }
     return found;
 }
+    
+static void rebuildSol(vector<vector<bool>> & sol, 
+               vector<string> & ss,
+               int index,
+               const string & t, 
+                      const string & accum) {
+    if(t.size() == index) ss.push_back(accum);
+    
+    for(int i = index; i < t.size(); ++i) {
+        if(sol[index][i]) {
+            // cout << index << " " << i << endl;
+            rebuildSol(sol, ss, i + 1, t, accum + (index ? " " : "") + t.substr(index, i - index + 1));
+        }
+    }
+}
 
-bool wordBreak(string s, const vector<string> & dict) {
+vector<string> wordBreak(string s, const vector<string> & dict) {
     
     unordered_set<int> dict1;
     unordered_set<int> dict2;
     vector<int> dp(s.size(), -1);
+    vector<vector<bool>> sol(s.size(), vector<bool>(s.size(), false));
 
     for(auto s: dict) {
         int h1 = 0;
@@ -185,11 +212,16 @@ bool wordBreak(string s, const vector<string> & dict) {
         dict1.insert(h1);
         dict2.insert(h2);
     }
+    
+    bool ret = solveWordBreak(dp, s, 0, dict1, dict2, sol);
 
-    return solveWordBreak(dp, s, 0, dict1, dict2);
-    
-    
+
+    vector<string> t;
+    rebuildSol(sol, t, 0, s, "");
+    return t;
 }
+};
+
 
 int comb(int n, int r) {
     vector<vector<int> > dp(2, vector<int>(r + 1, 1));
