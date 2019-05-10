@@ -305,6 +305,28 @@ int knapsackIterative(const vector<Clock> & clocks, const int & totalWeight) {
     return dp[totalWeight];
 }
 
+class SolutionTriangleMinimumPath {
+public:
+
+    int minimumTotal(vector<vector<int>>& triangle) {
+        vector<vector<int> > dp(2, vector<int>(triangle.size() + 1, numeric_limits<int>::max()));
+        
+        dp[0][1] = 0;
+        for(int i = 1; i <= triangle.size(); ++i) {
+            for(int j = 1; j <= i; ++j) {
+                int pi = ((i - 1) % 2 + 2) % 2;
+                
+
+                dp[i % 2][j] = 
+                    triangle[i - 1][j - 1] + min(dp[pi][j], dp[pi][j - 1]);
+                
+            }
+        }
+        return *min_element(dp[triangle.size() % 2].begin(), 
+                           dp[triangle.size() % 2].end());
+    }
+};
+
 void test() {
     cout << fib(1) << endl;
     cout << fib(8) << endl;
