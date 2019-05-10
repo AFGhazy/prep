@@ -351,27 +351,50 @@ public:
     }
 }; 
 
-void test() {
-    cout << fib(1) << endl;
-    cout << fib(8) << endl;
-    cout << fib(3) << endl;
-    cout << fib(30) << endl;
+int twoEndsCoinGame(const vector<int> & v) {
 
-    cout << fibIterative(1) << endl;
-    cout << fibIterative(8) << endl;
-    cout << fibIterative(3) << endl;
-    cout << fibIterative(30) << endl;
+    int n = v.size();
+    vector<vector<int> > dp(n, vector<int>(n, 0));
+    for(int width = 0; width < n; ++width) {
+        for(int i = 0, j = width; j < n; ++j, ++i) {
+
+            int bothStart = i + 2 <= j ? dp[i + 2][j] : 0;
+            int bothEnd = j -2 >= i ? dp[i][j - 2] : 0;
+            int bothEnds = i + 1 <= j - 1 ? dp[i + 1][j - 1] : 0;
+
+            dp[i][j] = max(v[i] + min(bothStart, bothEnds), v[j] + min(bothEnd, bothEnds));
+
+        }
+    }
+
+    return dp[0][n - 1];
+}
+
+void test() {
+    // cout << fib(1) << endl;
+    // cout << fib(8) << endl;
+    // cout << fib(3) << endl;
+    // cout << fib(30) << endl;
+
+    // cout << fibIterative(1) << endl;
+    // cout << fibIterative(8) << endl;
+    // cout << fibIterative(3) << endl;
+    // cout << fibIterative(30) << endl;
     // cout << coinChange({19,28,176,112,30,260,491,128,70,137,253}, 8539);
 
-    cout << comb(3, 2) << endl;
-    cout << comb(10, 3) << endl;
-    cout << comb(20, 3) << endl;
+    // cout << comb(3, 2) << endl;
+    // cout << comb(10, 3) << endl;
+    // cout << comb(20, 3) << endl;
 
-    int totalWeight = 10;
-    vector<Clock> v = {Clock(3, 7), Clock(8, 8), Clock(6, 4)};
-    vector<vector<int>> dp(totalWeight + 1, vector<int>(v.size(), -1));
-    cout << knapsack(dp, v, totalWeight, 0) << endl;
-    cout << knapsackIterative(v, totalWeight) << endl;
+    // int totalWeight = 10;
+    // vector<Clock> v = {Clock(3, 7), Clock(8, 8), Clock(6, 4)};
+    // vector<vector<int>> dp(totalWeight + 1, vector<int>(v.size(), -1));
+    // cout << knapsack(dp, v, totalWeight, 0) << endl;
+    // cout << knapsackIterative(v, totalWeight) << endl;
+
+    cout << twoEndsCoinGame({8, 15, 3, 7}) << endl;
+    cout << twoEndsCoinGame({2, 2, 2, 2}) << endl;
+    cout << twoEndsCoinGame({20, 30, 2, 2, 2, 10}) << endl;
 }
 
 int main() {
