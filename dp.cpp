@@ -327,6 +327,30 @@ public:
     }
 };
 
+class SolutionMinimumPathSum {
+public:
+    int minPathSum(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        
+        vector<vector<int> > dp(2, vector<int>(n + 1, numeric_limits<int>::max()));
+        
+        dp[0][1] = 0;
+        for(int i = 1; i <= m; ++i) {
+            for(int j = 1; j <= n; ++j) {
+                int pi = (i - 1) % 2;
+
+                
+                dp[i % 2][j] = 
+                    grid[i - 1][j - 1] + min(dp[pi][j], dp[i % 2][j - 1]);
+                
+                
+            }
+        }
+        return dp[m % 2][n];
+    }
+}; 
+
 void test() {
     cout << fib(1) << endl;
     cout << fib(8) << endl;
