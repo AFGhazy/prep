@@ -370,6 +370,17 @@ int twoEndsCoinGame(const vector<int> & v) {
     return dp[0][n - 1];
 }
 
+int climbingStairs(int n, int k) {
+    vector<int> dp(n + 1, 0);
+    dp[0] = 1;
+    for(int i = 1; i <= n; ++i) {
+        for(int j = 1; j <= k && i - j >= 0; ++j) {
+            dp[i] += dp[i - j];
+        }
+    }
+    return dp[n];
+}
+
 void test() {
     // cout << fib(1) << endl;
     // cout << fib(8) << endl;
@@ -395,6 +406,15 @@ void test() {
     cout << twoEndsCoinGame({8, 15, 3, 7}) << endl;
     cout << twoEndsCoinGame({2, 2, 2, 2}) << endl;
     cout << twoEndsCoinGame({20, 30, 2, 2, 2, 10}) << endl;
+
+    // cout << climbingStairs(4, 3) << endl;
+
+    // cout << climbingStairs(5, 2) << endl;
+    // cout << climbingStairs(1, 2) << endl;
+    // cout << climbingStairs(2, 2) << endl;
+    // cout << climbingStairs(4, 2) << endl;
+    // cout << climbingStairs(6, 2) << endl;
+    // cout << climbingStairs(8, 2) << endl;
 }
 
 int main() {
