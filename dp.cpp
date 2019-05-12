@@ -381,6 +381,31 @@ int climbingStairs(int n, int k) {
     return dp[n];
 }
 
+int minimumMessiness(const vector<string>& words, const int & lineLength) {
+    int n = words.size();
+    vector<int> sol(n);
+    vector<int> minMess(n, numeric_limits<int>::max());
+    for(int i = 0; i < n; ++i) {
+        int mess = lineLength - words[i].size();
+        
+        minMess[i] = (i > 0 ? minMess[i - 1] : 0) + mess * mess;
+        sol[i] = i;
+        for(int j = i - 1; j >= 0; --j) {
+            mess -= (words[j].size() + 1);
+            if(mess < 0) break;
+
+            int totalMess = mess * mess + (j > 0 ? minMess[j - 1] : 0);
+            if(minMess[i] > totalMess) {
+                sol[i] = j;
+                minMess[i] = totalMess;
+            }
+        }
+    }
+    copy(sol.begin(), sol.end(), ostream_iterator<int>(cout, " "));
+    cout << endl;
+    return minMess.back();
+}
+
 void test() {
     // cout << fib(1) << endl;
     // cout << fib(8) << endl;
@@ -403,9 +428,9 @@ void test() {
     // cout << knapsack(dp, v, totalWeight, 0) << endl;
     // cout << knapsackIterative(v, totalWeight) << endl;
 
-    cout << twoEndsCoinGame({8, 15, 3, 7}) << endl;
-    cout << twoEndsCoinGame({2, 2, 2, 2}) << endl;
-    cout << twoEndsCoinGame({20, 30, 2, 2, 2, 10}) << endl;
+    // cout << twoEndsCoinGame({8, 15, 3, 7}) << endl;
+    // cout << twoEndsCoinGame({2, 2, 2, 2}) << endl;
+    // cout << twoEndsCoinGame({20, 30, 2, 2, 2, 10}) << endl;
 
     // cout << climbingStairs(4, 3) << endl;
 
@@ -415,6 +440,9 @@ void test() {
     // cout << climbingStairs(4, 2) << endl;
     // cout << climbingStairs(6, 2) << endl;
     // cout << climbingStairs(8, 2) << endl;
+
+    cout << minimumMessiness({"a", "b", "c", "d"}, 5) << endl;
+    cout << minimumMessiness({"aaa", "bb", "cc", "ddddd"}, 6) << endl;
 }
 
 int main() {
