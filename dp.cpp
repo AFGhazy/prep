@@ -406,6 +406,38 @@ int minimumMessiness(const vector<string>& words, const int & lineLength) {
     return minMess.back();
 }
 
+class SolutionLIS {
+public:    
+    int lengthOfLIS(vector<int>& nums) {
+        
+        
+        int n = nums.size();
+        
+        vector<int> dp(n, 0);
+        int mx = 0;
+        int idx = 0;
+        vector<vector<int> > sol(n);
+        for(int i = 0; i < n; ++i) {
+            dp[i] = 1;
+            mx = max(mx, 1);
+            sol[i]= {nums[i]};
+            for(int j = 0; j < i; ++j) {
+                if(nums[i] > nums[j]){
+                    dp[i] = max(dp[i], dp[j] + 1);
+                    if(dp[i] > mx) {
+                        sol[i] = sol[j];
+                        sol[i].push_back(nums[i]);
+                        mx = dp[i];
+                        idx = i;
+                    }
+                }
+            }
+        }
+        // copy(sol[idx].begin(), sol[idx].end(), ostream_iterator<int>(cout, " "));
+        return mx;
+    }
+};
+
 void test() {
     // cout << fib(1) << endl;
     // cout << fib(8) << endl;
