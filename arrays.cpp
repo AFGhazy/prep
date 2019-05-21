@@ -473,7 +473,29 @@ vector<vector<int> > threeSumOptimal(vector<int> &num) {
     
 }
 
-
+// https://leetcode.com/problems/next-permutation/discuss/13994/Readable-code-without-confusing-ij-and-with-explanation
+class SolutionNextPermutation {
+public:
+    void nextPermutation(vector<int>& nums) {
+        int n = nums.size();
+        int i = n - 2;
+        for(; i >= 0; --i) {
+            if(nums[i + 1] > nums[i]) break;
+        }
+        if(i == -1) {
+            reverse(nums.begin(), nums.end());
+        } else {
+            
+            int idx = n - 1;
+            // we will ignore the equal numbers because we don't want to end up with previous permutation
+            
+            while(nums[idx] <= nums[i]) idx--;
+            swap(nums[i], nums[idx]);
+            // copy(nums.begin(), nums.end(), ostream_iterator<int>(cout, " "));
+            sort(nums.begin() + i + 1, nums.end());
+        }
+    }
+};
 
 int main() {
     test();
