@@ -50,6 +50,36 @@ string licenseKeyFormatting(string s, int k) {
     return t;
 }
 
+class SolutionLengthOfLongestSubstring {
+public:
+ int lengthOfLongestSubstring(string s) {
+    int n = s.length();
+    const int csz = (1 << 8);  
+
+    int mx = 0;
+    for(int i = 0; i < n; ++i) {
+        vector<bool> v(csz, 0);
+        for(int j = i; j < min(i + csz, n); ++j) {
+            if(v[s[j]]) break;
+            v[s[j]] = true, mx = max(mx, j - i + 1);
+        }
+    }
+    return mx;
+}
+
+int optimalLengthOfLongestSubstring(string s) {
+        vector<int> dict(256, -1);
+        int maxLen = 0, start = -1;
+        for (int i = 0; i != s.length(); i++) {
+            if (dict[s[i]] > start)
+                start = dict[s[i]];
+            dict[s[i]] = i;
+            maxLen = max(maxLen, i - start);
+        }
+        return maxLen;
+    }
+};
+
 int main() {
 
     cout << licenseKeyFormatting("--a-a-a-a--", 2) << endl;
