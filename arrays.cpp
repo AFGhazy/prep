@@ -305,6 +305,23 @@ public:
     }
 };
 
+//https://leetcode.com/problems/container-with-most-water/discuss/6099/Yet-another-way-to-see-what-happens-in-the-O(n)-algorithm
+class SolutionMaxArea {
+public:
+    int maxArea(vector<int>& height) {
+        int l = 0, r = height.size() - 1, ret = 0;
+        while(l<r)
+        {
+            ret = max(ret, min(height[l], height[r]) * (r - l));
+            if(height[l] < height[r])
+                l++;
+            else
+                r--;
+        }
+        return ret;
+    }
+};
+
 void test() {
 //    array<int, 5> a = {1, 2, 5, 7, 9};
 //
