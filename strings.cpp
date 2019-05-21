@@ -26,8 +26,31 @@ int numUniqueEmails(vector<string>& emails) {
     return s.size();
 }
 
+string licenseKeyFormatting(string s, int k) {
+    int n = s.length();
+    int count = 0;
+    string t = "";
+
+    int firstDahses = 0;
+    for(int i = 0; i < n; ++i) if(s[i] != '-') break; else firstDahses++;
+
+    for(int i = n - 1; i >= 0; --i) {
+        if(s[i] != '-') {
+            t += string(1, toupper(s[i]));
+            count++;
+
+            if(count == k) {
+                if(i != firstDahses) t += "-";
+                count = 0;
+            }
+        }
+    }
+
+    reverse(t.begin(), t.end());
+    return t;
+}
 
 int main() {
 
-
+    cout << licenseKeyFormatting("--a-a-a-a--", 2) << endl;
 }
