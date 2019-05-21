@@ -274,6 +274,37 @@ int totalFruit(const vector<int>& tree) {
     return mx;
 }
 
+class SolutionOddEvenJumps {
+public:
+    int oddEvenJumps(vector<int>& A) {
+        const int pinf = numeric_limits<int>::max();
+        const int ninf = numeric_limits<int>::min();
+        map<int,int> m = {{pinf, pinf}, {ninf, ninf}};
+        int n = A.size();
+        vector<pair<bool, bool> > reached(A.size(), {false, false});
+        reached[n-1] = {true, true};
+        int count = 1;
+        m[A[n-1]] = n - 1;
+        
+        for(int i = n - 2; i >= 0; --i) {
+            auto oddJ = m.lower_bound(A[i]);
+            auto evenJ = --m.upper_bound(A[i]);
+            
+            if(oddJ -> second != pinf) {
+                reached[i].first = reached[oddJ -> second].second;
+                if(reached[i].first) count++;
+            }
+            if(evenJ -> second != ninf) {
+                reached[i].second = reached[evenJ -> second].first;
+            }
+            
+            m[A[i]] = i;
+        }
+        
+        return count;
+    }
+};
+
 void test() {
 //    array<int, 5> a = {1, 2, 5, 7, 9};
 //
@@ -323,21 +354,20 @@ void test() {
 //    print(enumrateAllPrimes(acc));
 //    cout << acc << endl;
 
-    vector<int> a = {1, 2, 3, 4};
-    vector<int> v = {1, 2, 3, 0};
+    // vector<int> a = {1, 2, 3, 4};
+    // vector<int> v = {1, 2, 3, 0};
 
-    permute(a, v);
-    print(a);
-    cout << maxSubArray({-2,1,-3,4,-1,2,1,-5,4}) << endl;
-    cout << isSequenceArray({1,2,3,4,5}, 1, 5) << endl;
-    cout << isSequenceArray({-5, -5, -5, -4, -4, -3, -3, -2, -2}, -5, -2) << endl;
-    cout << isSequenceArray({0, 1, 2, 3, 4, 5}, 1, 5) << endl;
+    // permute(a, v);
+    // print(a);
+    // cout << maxSubArray({-2,1,-3,4,-1,2,1,-5,4}) << endl;
+    // cout << isSequenceArray({1,2,3,4,5}, 1, 5) << endl;
+    // cout << isSequenceArray({-5, -5, -5, -4, -4, -3, -3, -2, -2}, -5, -2) << endl;
+    // cout << isSequenceArray({0, 1, 2, 3, 4, 5}, 1, 5) << endl;
 
-    cout << totalFruit({3,3,3,1,2,1,1,2,3,3,4}) << endl;
+    // cout << totalFruit({3,3,3,1,2,1,1,2,3,3,4}) << endl;
 
+   
 }
-
-
 
 int main() {
     test();
