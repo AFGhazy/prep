@@ -1,6 +1,50 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+    sort(nums1.begin(), nums1.end());
+    sort(nums2.begin(), nums2.end());
+    vector<int> ret;
+
+    int p1 = 0, p2 = 0;
+    int sz1 = nums1.size(), sz2 = nums2.size();
+
+    while(p1 < sz1 && p2 < sz2) {
+        if(nums1[p1] < nums2[p2]) p1++;
+        else if(nums1[p1] > nums2[p2]) p2++;
+        else ret.push_back(nums1[p1]), p1++, p2++;
+    }
+
+    return ret;
+}
+
+void fill(vector<vector<char>> & grid, int i, int j) {
+    int h = grid.size(), w = grid[0].size();
+
+    if(i < 0 || j < 0 || i == h || j == w || grid[i][j] == '0') return;
+
+    grid[i][j] = '0';
+
+    fill(grid, i + 1, j);
+    fill(grid, i - 1, j);
+    fill(grid, i, j + 1);
+    fill(grid, i, j - 1);
+}
+
+int numIslands(vector<vector<char>>& grid) {
+    if(grid.size() == 0) return 0;
+    
+    int h = grid.size(), w = grid[0].size(), count = 0;
+    for(int i = 0; i < h; ++i) {
+        for(int j = 0; j < w; ++j) {
+            if(grid[i][j] - '0') {
+                count++, fill(grid, i, j);
+            }
+        }
+    }
+    return count;
+}
+
 int maxProduct(vector<int>& nums) {
     int cur = 1, curNeg = 1;
     int mx = numeric_limits<int>::min();
