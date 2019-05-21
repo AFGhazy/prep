@@ -80,6 +80,27 @@ int optimalLengthOfLongestSubstring(string s) {
     }
 };
 
+class SolutionMultiplyStrings {
+public:
+    string multiply(string a, string b) {
+        int asz = a.length();
+        int bsz = b.length();
+        string res(asz + bsz, '0');
+        for(int i = asz - 1; i >= 0; --i) {
+            for(int j = bsz - 1; j >= 0; --j) {
+                int cur = res[i + j + 1] - '0';
+                int tot = (a[i] - '0') * (b[j] - '0') + cur;
+                res[i+j+1] = (tot % 10) + '0';
+                res[i+j] = (tot / 10) + res[i+j];
+            }
+        }
+        int i = 0;
+        // zero special case
+        while(res[i] == '0' && i < res.size() - 1) ++i;
+        return res.substr(i);
+}
+};
+
 int main() {
 
     cout << licenseKeyFormatting("--a-a-a-a--", 2) << endl;
