@@ -182,6 +182,41 @@ public:
     }
 };
 
+int read4(char *buf);
+
+class SolutionRead4 {
+public:
+    /**
+     * @param buf Destination buffer
+     * @param n   Number of characters to read
+     * @return    The number of actual characters read
+     */
+    
+    private:
+    static const int BUFF_SIZE = 4;
+    char buf4[BUFF_SIZE];
+    int curBufSize = BUFF_SIZE;
+    int curIndex = BUFF_SIZE;
+    
+    public:
+    int read(char *buf, int n) {
+        int i = 0;
+        while(i < n) {
+            if(curIndex >= curBufSize) {
+                curBufSize = read4(buf4);
+                
+                if(curBufSize == 0) break;
+                
+                curIndex = 0;
+            }
+            buf[i++] = buf4[curIndex++];
+            
+        }
+        
+        return i;
+    }
+};
+
 int main() {
 
     cout << licenseKeyFormatting("--a-a-a-a--", 2) << endl;
