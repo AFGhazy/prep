@@ -101,6 +101,20 @@ public:
 }
 };
 
+class SolutionRotateSquareMatrix {
+public:
+    void rotate(vector<vector<int>>& m) {
+        int n = m.size();
+        for(int depth = 0; depth < n / 2; ++depth) {
+            for(int i = depth; i < n - depth - 1; ++i) {
+                swap(m[n - i - 1][depth], m[depth][i]);
+                swap(m[n - i - 1][depth], m[n - depth - 1][n - i - 1]);
+                swap(m[n - depth - 1][n - i - 1], m[i][n - depth - 1]);
+            }
+        }
+    }
+};
+
 int main() {
 
     cout << licenseKeyFormatting("--a-a-a-a--", 2) << endl;
