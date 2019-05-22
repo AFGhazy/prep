@@ -115,6 +115,73 @@ public:
     }
 };
 
+class SolutionMinWindow {
+public:
+    string minWindow(string s, string t) {
+        int n = s.length(), m = t.length();
+        if(n == 0 || m == 0) return "";
+        
+        const int sz = (1 << 8);
+        vector<int> needed(sz, 0);
+        int rem = t.length();
+        for(int i = 0; i < m; ++i) needed[t[i]]++;
+        
+        int l = 0, len = 0, solL = 0, min = numeric_limits<int>::max();
+        while(l < n && len <= n) {
+            if(rem) {
+                if(len == n) break;
+                
+                needed[s[len]]--;
+                if(needed[s[len]] >= 0) rem--;
+                len++;
+            } else {
+                if(len - l < min) {
+                    min = len - l;
+                    solL = l;
+                }
+                needed[s[l]]++;
+                if(needed[s[l]] > 0) rem++;
+                l++;
+            }
+        }
+        return (min == numeric_limits<int>::max() ? "" : s.substr(solL, min));
+    }
+};
+
+class SolutionEasyMinWindow {
+public:
+    string minWindow(string s, string t) {
+        int n = s.length(), m = t.length();
+        if(n == 0 || m == 0) return "";
+        
+        const int sz = (1 << 8);
+        vector<int> map(sz, 0);
+        for(auto c: t) map[c]++;
+        
+        const int inf = numeric_limits<int>::max();
+        int start = 0, end = 0, solStart = 0, min = inf, remaining = m;
+        
+        while(end < n) {
+            map[s[end]]--;
+            if(map[s[end]] >= 0) remaining--;
+            end++;
+            
+            while(!remaining) {
+                if(min > end - start) {
+                    min = end - start;
+                    solStart = start;
+                }
+                
+                map[s[start]]++;
+                if(map[s[start]] > 0) remaining++;
+                start++;
+            }
+        }
+        
+        return min == inf ? "" : s.substr(solStart, min);
+    }
+};
+
 int main() {
 
     cout << licenseKeyFormatting("--a-a-a-a--", 2) << endl;
