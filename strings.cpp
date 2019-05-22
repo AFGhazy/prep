@@ -217,7 +217,30 @@ public:
     }
 };
 
-int main() {
+int lengthOfLongestSubstringTwoDistinct(string s) {
+    int mxLen = 0, curChars = 0, idx = 0, len = 0, n = s.length();
+    const int SZ = (1 << 8);
+    vector<int> cnt(SZ, 0);
 
-    cout << licenseKeyFormatting("--a-a-a-a--", 2) << endl;
+    while(len <= n) {
+        if(curChars <= 2) {
+            mxLen = max(mxLen, len - idx);
+
+            if(len == n) break;
+            if(!cnt[s[len]]) curChars++;
+            cnt[s[len]]++;
+            len++;
+        }
+        else {
+            cnt[s[idx]]--;
+            if(!cnt[s[idx]]) curChars--;
+            idx++;
+        }
+    }
+    return mxLen;
+}
+
+int main() {
+    cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
+    
 }
