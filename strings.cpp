@@ -314,7 +314,14 @@ public:
     }
 };
 
+
+
 int main() {
-    cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
+    // cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
+    string s = "abcdefg";
+    s.replace(0, 2, "xxxx");
+    cout << s << endl;
+    cout << (s.find("t") == string::npos) << endl;
     
+
 }
