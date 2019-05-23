@@ -277,6 +277,43 @@ public:
     }
 };
 
+// https://leetcode.com/problems/expressive-words/discuss/122660/C%2B%2BJavaPython-2-Pointers-and-4-pointers
+class SolutionExpressiveWords {
+public:
+    vector<pair<char, int>> compress(const string & s) {
+        vector<pair<char, int> > v;
+    for(auto c: s) {
+            if(v.empty() || v.back().first != c) v.push_back({c, 1});
+            else v.back().second++;
+        }
+        return v;
+    }
+    
+    int expressiveWords(string S, vector<string>& words) {
+        vector<pair<char, int> > original = compress(S);
+        
+        
+        int res = 0;
+        for(auto w: words) {
+            vector<pair<char,int>> cur = compress(w);
+            
+            bool match = true;
+            if(cur.size() == original.size()) {
+                for(int i = 0; i < cur.size(); ++i) {
+                    
+                    if(cur[i].first != original[i].first
+                      || cur[i].second > original[i].second ||
+                      (cur[i].second == 1 && original[i].second == 2))
+                        match = false;
+                }
+            } else match = false;
+            
+            if(match) res++;
+        }
+    return res;
+    }
+};
+
 int main() {
     cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
     
