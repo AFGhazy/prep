@@ -240,6 +240,43 @@ int lengthOfLongestSubstringTwoDistinct(string s) {
     return mxLen;
 }
 
+class SolutionNextClosestTime {
+public:
+    void enumrate(const string & accum, const string pspDigits, set<string> & s) {
+        if(accum.size() == 5) {
+            s.insert(accum);
+            return;
+        }
+        
+        if(accum.size() == 2) return enumrate(accum + ":", pspDigits, s);
+        
+        for(auto c: pspDigits) {
+            if(c != ':') {
+                int len = accum.length();
+                if(
+                    (len == 0 && c <= '2') ||
+                    (len == 1 && c < '4') ||
+                    (len == 1 && accum[0] < '2') ||
+                    (len == 3 && c < '6') ||
+                    len == 4
+                )
+                enumrate(accum + c, pspDigits, s);
+            }
+        }
+    }
+    
+    string nextClosestTime(string time) {
+        set<string> s;
+        enumrate("", time, s);
+        
+        if(s.upper_bound(time) == s.end()) {
+            return *s.begin();
+        } else {
+            return *s.upper_bound(time);
+        }
+    }
+};
+
 int main() {
     cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
     
