@@ -314,7 +314,33 @@ public:
     }
 };
 
-
+class SolutionFindReplaceString {
+public:
+    string findReplaceString(string in, vector<int>& ind, vector<string>& sources, vector<string>& targets) {
+        string out(in.size(), ' ');
+        int n = ind.size();
+        vector<string> s(n), t(n);
+        vector<int> perm(n);
+        iota(perm.begin(), perm.end(), 0);
+        sort(perm.begin(), perm.end(), [&](const int & a, const int & b) -> bool {
+            return ind[a] < ind[b];
+        });
+        
+        for(int i = 0; i < n; ++i) s[i] = sources[perm[i]], t[i] = targets[perm[i]];
+        sort(ind.begin(), ind.end());
+        
+        int cur = n - 1;
+        for(int i = in.length() - 1; i >= 0; --i) {
+            out[i] = in[i];
+            if(cur >= 0 && i == ind[cur]) {
+                
+                if(out.find(s[cur]) == i) out.replace(i, s[cur].size(), t[cur]);
+                --cur;
+            }
+        }
+        return out;
+    }
+};
 
 int main() {
     // cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
