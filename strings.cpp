@@ -509,6 +509,56 @@ public:
     }
 };
 
+class SolutionGroupAnagrams {
+public:
+    
+    struct VHash {
+        template<class T>
+      size_t operator()(const vector<T> & v) const {
+          auto h = hash<T>();
+          size_t a = 0;
+          for(auto aa: v) a ^= h(aa);
+          return a;
+      }
+    };
+    
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        int n = strs.size();
+        const int SZ = (1 << 8);
+        vector<int> v(SZ, 0);
+        unordered_map<vector<int>, vector<string>, VHash> mp;
+        for(auto s: strs) {
+            fill(v.begin(), v.end(), 0);
+            for(auto c: s) v[c]++;
+            mp[v].push_back(s);
+        }
+        vector<vector<string> > res;
+        for(auto m: mp) {
+            res.push_back(m.second);
+        }
+        return res;
+    }
+}; 
+
+
+class SolutionGroupAnagramsOp {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        int n = strs.size();
+        unordered_map<string, vector<string>> mp;
+        for(auto s: strs) {
+            string t = s;
+            sort(t.begin(), t.end());
+            mp[t].push_back(s);
+        }
+        vector<vector<string> > res;
+        for(auto m: mp) {
+            res.push_back(m.second);
+        }
+        return res;
+    }
+}; 
+
 int main() {
     // cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
     string s = "abcdefg";
