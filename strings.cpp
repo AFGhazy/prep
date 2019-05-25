@@ -559,6 +559,40 @@ public:
     }
 }; 
 
+
+class SolutionCompareVersion {
+public:
+    int compareVersion(string version1, string version2) {
+        std::regex re("\\.");
+        vector<string> v(sregex_token_iterator(version1.begin(), version1.end(), re, -1),
+        sregex_token_iterator());
+        vector<string> t(sregex_token_iterator(version2.begin(), version2.end(), re, -1),
+        sregex_token_iterator());
+        
+        while(v.size() > 1 && v.back().find_first_not_of('0') == string::npos) v.pop_back();
+        while(t.size() > 1 && t.back().find_first_not_of('0') == string::npos) t.pop_back();
+        
+        int n = v.size(), m = t.size();
+        
+        for(int i = 0; i < min(n,m); ++i) {
+            string s1 = v[i];
+            string s2 = t[i];
+            int mx = max(s1.length(), s2.length());
+            
+            s1 = string(mx - s1.length(), '0') + s1;
+            s2 = string(mx - s2.length(), '0') + s2;
+            
+            if(s1 < s2) return -1;
+            else if(s1 > s2) return 1;
+        }
+        if(n == m) return 0;
+        else if(n < m) return -1;
+        else return 1;
+        
+        return 0;
+    }
+};
+
 int main() {
     // cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
     string s = "abcdefg";
