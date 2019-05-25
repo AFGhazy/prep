@@ -416,6 +416,50 @@ public:
     }
 };
 
+class SolutionIntToRoman {
+public:
+    string con(int num, string sym) {
+        string out = "";
+        while(num) {
+            if(num & 1) out += sym;
+            sym += sym;
+            num >>= 1;
+        }
+        return out;
+    }
+    
+    string vts(const int & num, const string & symbol, const int & val) {
+        return con(num / val, symbol);
+    }
+    
+    string intToRoman(int num) {
+        vector<pair<string, int> > valToSymbol = {{"M",1000},
+        {"CM", 900},
+        {"D",500},
+        {"CD", 400},
+        {"C",100},
+        {"XC",90},
+        {"L",50},
+        {"XL",40},
+        {"X",10},
+        {"IX",9},
+        {"V",5},
+        {"IV",4},
+        {"I",1}};
+
+    string out = "";
+        for(auto vs: valToSymbol) {
+            out += vts(num, vs.first, vs.second);
+            num %= vs.second;
+        }
+        return out;
+
+
+
+
+    }
+};
+
 int main() {
     // cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
     string s = "abcdefg";
