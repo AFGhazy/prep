@@ -493,6 +493,22 @@ public:
     }
 };
 
+class SolutionStrStr {
+public:
+    int strStr(string h, string ne) {
+        bool found = false;
+        int n = h.size();
+        int m = ne.size();
+        if(m == 0) return 0;
+        for(int i = 0; i < n - m + 1; ++i) {
+            bool found = true;
+            for(int k = 0; k < m; ++k) found &= (h[i + k] == ne[k]);
+            if(found) return i;
+        }
+        return -1;
+    }
+};
+
 int main() {
     // cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
     string s = "abcdefg";
