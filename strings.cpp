@@ -342,6 +342,80 @@ public:
     }
 };
 
+class SolutionMyAtoi {
+public:
+    long long helper(const string & s, const int & idx) {
+        if(idx == -1) return 0;
+        
+        return helper(s, idx - 1) * 10 + (s[idx] - '0');
+    }
+    
+    int myAtoi(string s) {
+        int n = s.length();
+        int start = 0, end = n-1;
+        while(start < n && s[start] == ' ') start++;
+        end = start;
+        bool pos = false;
+        bool point = false;
+        bool dig = false;
+        
+        while(end < n && (isdigit(s[end]) || s[end] == '-' || s[end] == '.' || s[end] == '+')){
+            dig |= (isdigit(s[end]));
+            if(s[end] == '+' || s[end] == '-'){ if(pos||dig){ break; } pos = true; }   
+            if(s[end] == '.'){ if(point){ break; } point = true; }   
+         ++end;
+        }
+        
+        if(start >= end) return 0;
+        
+        string cur = s.substr(start, end - start);
+        long long neg = 1;
+        if(cur.size() && (cur[0] == '-' || cur[0] == '+')) {
+            neg = cur[0] == '+' ? 1 : -1;
+            cur = cur.substr(1, cur.length() - 1);
+        }
+        
+        int len = cur.length();
+        while(len >= 0 && cur[len] != '.') len--;
+        if(len != -1) cur = cur.substr(0, len);
+        
+         start = 0;
+        while(start < cur.length() - 1 && cur[start] == '0') start ++;
+        cout << start << endl;
+        cur = cur.substr(start, cur.length() - start);
+        cout << cur << endl;
+        
+        for(auto c: cur) if(!isdigit(c)) return 0;
+        if(cur.length() > 10 && neg == -1) return numeric_limits<int>::min();
+        else if(cur.length() > 10 && neg == 1)return numeric_limits<int>::max();
+        
+        long long res = neg * helper(cur, cur.length() - 1);
+        cout << res << endl;
+        cout << res << endl;
+        if(res < numeric_limits<int>::min()) return numeric_limits<int>::min();
+        else if(res > numeric_limits<int>::max()) return numeric_limits<int>::max();
+        return res;
+    }
+
+    int myAtoiOptimal(string str) {
+    long long int result = 0;
+    int indicator = 1;
+
+    int i = str.find_first_not_of(' ');
+    if(str[i] == '-' || str[i] == '+')
+        indicator = (str[i++] == '-')? -1 : 1;
+        
+    while('0'<= str[i] && str[i] <= '9') 
+    {
+        result = result*10 + (str[i++]-'0');
+        if(result*indicator >= INT_MAX) return INT_MAX;
+        if(result*indicator <= INT_MIN) return INT_MIN;                
+    }
+        
+    return result*indicator;
+    }
+};
+
 int main() {
     // cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
     string s = "abcdefg";
