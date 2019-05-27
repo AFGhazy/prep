@@ -593,6 +593,95 @@ public:
     }
 };
 
+class SolutionNumberToWords {
+public:
+    vector<string> thToS(int num, int shift) {
+        string tw[] = {"",
+"One",
+"Two",
+"Three",
+"Four",
+"Five",
+"Six",
+"Seven",
+"Eight",
+"Nine",
+"Ten",
+"Eleven",
+"Twelve",
+"Thirteen",
+"Fourteen",
+"Fifteen",
+"Sixteen",
+"Seventeen",
+"Eighteen",
+"Nineteen"};
+        
+        string te[] = {
+            "",
+            "",
+            "Twenty",
+"Thirty",
+"Forty",
+"Fifty",
+"Sixty",
+"Seventy",
+"Eighty",
+"Ninety",
+"Hundred"
+        };
+        
+        vector<string> s;
+        int firstPart = num % 100;
+        
+        if(num / 100) {
+            s.push_back(tw[num / 100] + " " + te[10]);
+        }
+        
+        if(firstPart < 20) {
+            s.push_back(tw[firstPart]);
+        } else {
+            s.push_back(te[firstPart / 10]);
+            s.push_back(tw[firstPart % 10]);
+        }
+        
+        string th[] = {
+            "",
+            "Thousand",
+            "Million",
+            "Billion"
+        };
+        
+        s.erase(std::remove(s.begin(), s.end(), ""), s.end());
+        
+        if(s.size() && shift) s.push_back(th[shift]);
+        
+        return s;
+    }
+    
+    string numberToWords(int num) {
+        vector<string> t;
+        vector<string> tmp = thToS((num / 1000000000) % 1000, 3);
+        t.insert(t.end(), tmp.begin(), tmp.end());
+        tmp = thToS((num / 1000000) % 1000, 2);
+        t.insert(t.end(), tmp.begin(), tmp.end());
+        tmp = thToS((num / 1000) % 1000, 1);
+        t.insert(t.end(), tmp.begin(), tmp.end());
+        tmp = thToS(num % 1000, 0);
+        t.insert(t.end(), tmp.begin(), tmp.end());
+        
+        if(t.size()) {
+            string s = "";
+            for(auto cur: t){
+                if(s.size()) s += " ";
+                s += cur;
+            }
+            return s;
+        }
+        return "Zero";
+    }
+};
+
 int main() {
     // cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
     string s = "abcdefg";
