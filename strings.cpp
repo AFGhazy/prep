@@ -748,6 +748,51 @@ public:
     }
 };
 
+class SolutionReorderLogFiles {
+public:
+    void sortByLog(vector<string> & v) {
+        unordered_map<string, int> mp;
+        unordered_map<string, vector<string> > mpv;
+        regex r(" ");
+        for(int i = 0; i < v.size(); ++i) {
+            mp[v[i]] = i;
+            mpv[v[i]] = {
+                sregex_token_iterator(v[i].begin(), v[i].end(), r, -1),
+                sregex_token_iterator()
+            };
+        }
+        
+        
+        sort(v.begin(), v.end(), [&mp,&mpv](const string & a, const string & b) {
+            vector<string> & va = mpv[a];
+            vector<string> & vb = mpv[b];
+            
+            if(isalpha(va[1][0]) && isalpha(vb[1][0])) {
+                for(int i = 1; i < va.size(); ++i) {
+                    if(i == vb.size()) return false; 
+                    if(va[i] < vb[i]) {
+                        return true;
+                    } else if(va[i] > vb[i]) {
+                        return false;
+                    }
+                }
+                return true;
+            } else if(isalpha(va[1][0])) {
+                return true;
+            } else if(isalpha(vb[1][0])) {
+                return false;
+            } else {
+                return mp[a] < mp[b];
+            }
+        });
+    }
+    
+    vector<string> reorderLogFiles(vector<string>& logs) {
+        sortByLog(logs);
+        return logs;
+    }
+};
+
 int main() {
     // cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
     string s = "abcdefg";
