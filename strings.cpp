@@ -718,6 +718,36 @@ public:
     }
 };
 
+
+class SolutionMostCommonWord {
+public:
+    string mostCommonWord(string p, vector<string>& b) {
+        
+        unordered_set<string> ba(b.begin(), b.end());
+        
+        for(int i = 0; i < p.size(); ++i) p[i] = tolower(p[i]);
+        regex re("[\\s|\\.|,|\\!|\\?|\\'|;]");
+        vector<string> v = {sregex_token_iterator(p.begin(), p.end(), re, -1),
+                            sregex_token_iterator()};
+        
+        v.erase(remove_if(v.begin(), v.end(), [](const string & s) -> bool { return s == ""; }), v.end());
+        
+        unordered_map<string, int> mp;
+        int mx = 0;
+        string ss = "";
+        for(auto s: v) {
+            mp[s]++;
+            if(mx < mp[s] && ba.find(s) == ba.end()) {
+                mx = mp[s];
+                ss = s;
+            }
+        }
+        
+        return ss;
+        
+    }
+};
+
 int main() {
     // cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
     string s = "abcdefg";
