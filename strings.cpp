@@ -700,6 +700,24 @@ public:
     }
 };
 
+class SolutionIsValidParentheses {
+public:
+    bool isValid(string s) {
+        int n = s.length();
+        string op = "([{";
+        string cp = ")]}";
+        stack<char> ss;
+        for(auto c: s) {
+            int idx = cp.find(c);
+            if(idx != string::npos) {
+                if(ss.empty() || ss.top() != op[idx]) return false;
+                ss.pop();
+            } else ss.push(c);
+        }
+        return ss.empty();
+    }
+};
+
 int main() {
     // cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
     string s = "abcdefg";
