@@ -682,6 +682,24 @@ public:
     }
 };
 
+class SolutionFirstUniqChar {
+public:
+    
+    static const int size = 1 << 8;
+    
+    int firstUniqChar(string s) {
+        int a[size] = {0};
+        for(int i = 0; i < s.size(); ++i) {
+            a[s[i]]++;
+        }
+        
+        for(int i = 0; i < s.size(); ++i) {
+            if(a[s[i]] == 1) return i;
+        }
+        return -1;
+    }
+};
+
 int main() {
     // cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
     string s = "abcdefg";
