@@ -91,7 +91,7 @@ public:
     }
 };
 
-class SolutionOptimal {
+class SolutionOptimalReverseKGroup {
 public:
     
     ListNode* reverseKGroup(ListNode* head, int k) {
@@ -109,6 +109,54 @@ public:
             while(s.size()) { s.top()->val = q.front(); s.pop(), q.pop(); }
         }
         return head;
+    }
+};
+
+class SolutionConstantMemReverseKGroup {
+public:
+    
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        auto cur = head;
+        int cnt = 0;
+        while(cnt < k && cur) { cur = cur->next, cnt++; }
+        
+        if(cnt == k) {
+            cur = reverseKGroup(cur, k);
+            while(cnt--) {
+                auto tmp = head->next;
+                head->next = cur, cur = head, head = tmp;
+            }
+            head = cur;
+        }
+        
+        return head;
+    }
+};
+
+class SolutionOptimalIterativeReverseKGroup {
+public:
+    
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        auto dummy = new ListNode(0);
+        dummy->next = head;
+        auto prev = dummy, tail = dummy, cur = dummy;
+        while(true) {
+            int cnt = 0;
+            while(tail && cnt++ < k) tail = tail->next;
+            if(!tail) break;
+            head = prev->next;
+            
+            while(prev->next != tail) {
+                cur = prev->next;
+                prev->next = cur->next;
+                
+                cur->next = tail->next;
+                tail->next = cur;
+            }
+            
+            tail = prev = head;
+        }
+        return (*dummy).next;
     }
 };
 
