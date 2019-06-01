@@ -160,6 +160,81 @@ public:
     }
 };
 
+
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+
+    Node() {}
+
+    Node(int _val, Node* _next, Node* _random) {
+        val = _val;
+        next = _next;
+        random = _random;
+    }
+};
+
+class SolutionCopyRandomList {
+unordered_map<Node *, Node *> m;
+public:
+    Node* copyRandomList(Node* head) {
+        if(head == NULL) return NULL;
+        Node * cur = new Node(head -> val, NULL, head->random);
+        m[head] = cur;
+        cur->next = copyRandomList(head->next);
+        
+        if(cur->random) cur->random = m[cur->random];
+        return cur;
+    }
+};
+
+class SolutionCopyRandomListOptimal {
+public:
+    Node* copyRandomList(Node* head) {
+        if(head == NULL) return NULL;
+        Node * l1, * l2, * newHead;
+        for(l1 = head; l1; l1 = l1->next) {
+            l2 = new Node(l1->val, l1->random, NULL);
+            l1->random = l2;
+        }
+        newHead = head->random;
+        for(l1 = head; l1; l1 = l1->next) {
+            l2 = l1->random;
+            l2->random = l2->next ? l2->next->random : NULL;
+        }
+
+        for(l1 = head; l1; l1 = l1->next) {
+            l2 = l1->random;
+            l1->random = l2->next;
+            l2->next = l1->next ?l1->next->random : NULL;
+        }
+        return newHead;
+        
+    }
+};
+
+class SolutionEasyOptimalCopyRandomList {
+public:
+    Node* copyRandomList(Node* head) {
+        for(auto l1 = head; l1; l1 = l1->next->next) {
+            auto tmp = l1->next;
+            l1->next = new Node(l1->val, tmp, NULL);
+        }
+        Node * newHead = head ? head->next : NULL;
+        for(auto l1 = head; l1; l1 = l1->next->next) {
+            if(l1->random) l1->next->random = l1->random->next;
+        }
+        for(auto l1 = head; l1; l1 = l1->next) {
+            auto l2 = l1->next;
+            if(l2) l1->next = l2->next;
+            if(l2->next) l2->next = l2->next->next;
+        }
+        return newHead;
+    }
+};
+
 int main() {
     
 }
