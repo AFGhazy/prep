@@ -235,6 +235,29 @@ public:
     }
 };
 
+class SolutionReverseList {
+public:
+    ListNode* reverseList(ListNode* head, ListNode* prev = NULL) {
+        auto cur = head && head->next ? reverseList(head->next, head) : head;
+        if(head) head->next = prev;
+        return cur;
+    }
+};
+
+class SolutionOptimalReverseList {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode * prev = NULL;
+        for(auto l1 = head; l1;) {
+            auto tmp = l1->next;
+            l1->next = prev;
+            prev = l1;
+            l1 = tmp;
+        }
+        return prev;
+    }
+};
+
 int main() {
     
 }
