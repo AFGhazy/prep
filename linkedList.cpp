@@ -9,7 +9,7 @@ struct ListNode {
 };
 
 
-class Solution {
+class SolutionAddTwoNumbers {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2, const int & carry = 0) {
         if(!l1 && !l2 && !carry) return NULL;
@@ -34,7 +34,7 @@ public:
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
-class Solution {
+class SolutionMergeTwoLists {
 public:
     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
         if(!l1&&!l2) return NULL;
@@ -50,6 +50,65 @@ public:
         }
         cur->next = mergeTwoLists(l1, l2);
         return cur;
+    }
+};
+
+// reverse linked lists my solution non optimal 
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class SolutionReverseKGroup {
+public:
+    ListNode* reverseKGroup(ListNode* head, int k, const int & idx, queue<int> & q) {
+        if(head == NULL) {
+            if(idx % k != 0) q = queue<int>();
+            return NULL;
+        }
+        
+        queue<int> curQ = q;
+        if(idx % k == 0) q = queue<int>();
+        
+        q.push(head->val);
+        reverseKGroup(head->next, k, idx + 1, q);
+        
+        if(q.size()) {
+            head->val = q.front();
+            q.pop();
+        }
+        if(idx % k == 0) q = curQ;
+        
+        return head;
+    }
+    
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        queue<int> q = queue<int>();
+        return reverseKGroup(head, k, 0, q);
+    }
+};
+
+class SolutionOptimal {
+public:
+    
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        queue<int> q = queue<int>();
+        stack<ListNode *> s;
+        ListNode * cur = head;
+        while(cur != NULL) {
+            int idx = 0;
+            while(idx++ < k && cur) {
+                s.push(cur);
+                q.push(cur->val);
+                cur = cur->next;
+            }
+            if(idx != k + 1) break;
+            while(s.size()) { s.top()->val = q.front(); s.pop(), q.pop(); }
+        }
+        return head;
     }
 };
 
