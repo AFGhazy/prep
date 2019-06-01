@@ -307,6 +307,31 @@ public:
     }
 };
 
+class SolutionMerge2ListsIntuational {
+public:
+    ListNode * merge2Lists(ListNode * a, ListNode * b) {
+        if(!a&&!b) return NULL;
+        if(!a) return b;
+        if(!b) return a;
+        
+        
+        if(a->val <= b->val) {
+            a->next = merge2Lists(a->next, b);
+            return a;
+        }
+        b->next = merge2Lists(a, b->next);
+        return b;
+    }
+    
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        while(lists.size() > 1) {
+            lists.push_back(merge2Lists(lists[0], lists[1]));
+            lists.erase(lists.begin()), lists.erase(lists.begin());
+        }
+        return lists.empty() ? NULL : lists.front();
+    }
+};
+
 int main() {
     
 }
