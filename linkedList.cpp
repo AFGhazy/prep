@@ -258,6 +258,55 @@ public:
     }
 };
 
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+struct Comparator {
+    bool operator()(const pair<int,int> & a, const pair<int,int> & b) const {
+        return a.first == b.first ? a.second > b.second : a.first > b.first;
+    }  
+};
+
+class SolutionMergeKLists {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int> > > p;
+        int n = lists.size();
+        vector<ListNode*> idx(n);
+        for(int i = 0; i < n; ++i) {
+            idx[i] = lists[i];
+            if(idx[i]) {
+                p.push({idx[i]->val, i});
+                idx[i] = idx[i]->next;
+            }
+        }
+        ListNode * head = NULL, * prev = NULL;
+        while(!p.empty()) {
+            int val = p.top().first;
+            int i = p.top().second;
+            
+            ListNode * cur = new ListNode(val);
+            if(!prev) head = cur, prev = cur;
+            else prev->next = cur, prev = cur;
+            
+            if(idx[i]) {
+                p.push({idx[i]->val, i});
+                idx[i] = idx[i]->next;
+            }
+            
+            p.pop();
+        }
+        return head;
+    }
+};
+
 int main() {
     
 }
