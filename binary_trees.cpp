@@ -58,6 +58,37 @@ public:
 };
 
 
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class SolutionDiameterOfBinaryTree {
+public:
+    int findDim(TreeNode * cur, int & mx) {
+        if(!cur) return 0;
+        
+        int l = 1 + findDim(cur->left, mx);
+        int r = 1 + findDim(cur->right, mx);
+        
+        
+        
+        mx = max(max(l + r - 2, mx), max(l, r) - 1);
+        
+        return max(l, r);
+    }
+    
+    int diameterOfBinaryTree(TreeNode* root) {
+        int mx = 0;
+        findDim(root, mx);
+        return mx;
+    }
+};
+
 
 int main() {
 }
