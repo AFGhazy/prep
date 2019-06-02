@@ -94,6 +94,40 @@ public:
     }
 };
 
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+struct State {
+    TreeNode * node;
+    int level;
+    State(TreeNode * node, int level) : node(node), level(level) {}
+};
+
+class SolutionLevelOrder {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int> > v;
+        queue<State> q;
+        if(root) q.push(State(root, 0));
+        while(q.size()) {
+            State cur = q.front();
+            q.pop();
+            if(cur.level >= v.size()) v.push_back(vector<int>());
+            v[cur.level].push_back(cur.node->val);
+            if(cur.node->left) q.push(State(cur.node->left, cur.level + 1));
+            if(cur.node->right) q.push(State(cur.node->right, cur.level + 1));
+        }
+        return v;
+    }
+};
+
 int main() {
 
 }
