@@ -48,49 +48,114 @@ public:
     }
 };
 
-class SolutionQuickestFindLadders {
+class SolutionFindLadders2 {
 public:
-    int cmp(const string & s, const string & t) {
-        int cnt = 0;
-        for(int i = 0; i < s.length(); ++i) cnt += (s[i] != t[i]);
-        return cnt;
-    }
     
     vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
         if(find(wordList.begin(), wordList.end(), beginWord) == wordList.end()) wordList.push_back(beginWord);
-        unordered_map<string, vector<string> > g;
-        for(int i = 0; i < wordList.size(); ++i) {
-            for(int j = 0; j < wordList.size(); ++j) {
-                if(cmp(wordList[i], wordList[j]) == 1) g[wordList[i]].push_back(wordList[j]);
+        unordered_map<string, vector<int> > g;
+        
+        for(int k = 0; k < wordList.size(); ++k) {
+            for(int i = 0; i < wordList[k].length(); ++i) {
+                string tmp = wordList[k];
+                tmp[i] = 'X';
+                g[tmp].push_back(k);
             }
         }
         
-        vector<vector<string> > ret;
-        unordered_map<string,int> mp;
-        queue<vector<string> > q;
-        q.push({beginWord});
+        vector<vector<int> > ret;
+        unordered_map<int,int> mp;
+        queue<vector<int> > q;
+        q.push({find(wordList.begin(), wordList.end(), beginWord) - wordList.begin()});
+        
         while(!q.empty()) {
-            vector<string> cur = q.front();
+            vector<int> cur = q.front();
             q.pop();
             
             
             if(mp.count(cur.back()) && mp[cur.back()] != cur.size()) continue;
             
-            if(cur.back() == endWord) {
+            if(wordList[cur.back()] == endWord) {
                 ret.push_back(cur);
             }
             
             mp[cur.back()] = cur.size();
             
-            auto & b = g[cur.back()];
+            int b = cur.back();
             
-            for(auto & str: b) {
-                cur.push_back(str);
-                q.push(cur);
-                cur.pop_back();
+            for(int i = 0; i < wordList[b].size(); ++i) {
+                string tmp = wordList[b];
+                tmp[i] = 'X';
+                for(auto s: g[tmp]) {
+                    if(s != b) {
+                        cur.push_back(s);
+                        q.push(cur);
+                        cur.pop_back();
+                    }
+                }
             }
         }
-        return ret;
+        vector<vector<string > > retS;
+        for(int i = 0; i < ret.size(); ++i) {
+            retS.push_back(vector<string>());
+            for(int j = 0; j < ret[i].size(); ++j) {
+                retS[i].push_back(wordList[ret[i][j]]);
+            }
+        }
+        
+        return retS;
+    }
+};
+
+class SolutionLadderLength {
+public:
+    
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        
+        if(find(wordList.begin(), wordList.end(), beginWord) == wordList.end()) wordList.push_back(beginWord);
+        unordered_map<string, vector<int> > g;
+        
+        for(int k = 0; k < wordList.size(); ++k) {
+            for(int i = 0; i < wordList[k].length(); ++i) {
+                string tmp = wordList[k];
+                tmp[i] = 'X';
+                g[tmp].push_back(k);
+            }
+        }
+        
+        unordered_map<int,int> mp;
+        queue<vector<int> > q;
+        q.push({find(wordList.begin(), wordList.end(), beginWord) - wordList.begin()});
+        
+        while(!q.empty()) {
+            vector<int> cur = q.front();
+            q.pop();
+            
+            
+            if(mp.count(cur.back()) && mp[cur.back()] != cur.size()) continue;
+            
+            if(wordList[cur.back()] == endWord) {
+                return cur.size();
+            }
+            
+            mp[cur.back()] = cur.size();
+            
+            int b = cur.back();
+            
+            for(int i = 0; i < wordList[b].size(); ++i) {
+                string tmp = wordList[b];
+                tmp[i] = 'X';
+                for(auto s: g[tmp]) {
+                    if(s != b) {
+                        cur.push_back(s);
+                        q.push(cur);
+                        cur.pop_back();
+                    }
+                }
+            }
+        }
+        
+        return 0;
     }
 };
 
