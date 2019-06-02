@@ -128,6 +128,30 @@ public:
     }
 };
 
+class SolutionZigzagLevelOrder {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int> > v;
+        queue<State> q;
+        if(root) q.push(State(root, 0));
+        while(q.size()) {
+            State cur = q.front();
+            TreeNode * l = cur.node->left;
+            TreeNode * r = cur.node->right;
+            int lvl = cur.level;
+            q.pop();
+            
+            if(lvl >= v.size()) v.push_back(vector<int>());
+            v[lvl].push_back(cur.node->val);
+            
+            if(l) q.push(State(l, lvl + 1));
+            if(r) q.push(State(r, lvl + 1));
+        }
+        for(int i = 0; i < v.size(); ++i) if(i & 1) reverse(v[i].begin(), v[i].end());
+        return v;
+    }
+};
+
 int main() {
 
 }
