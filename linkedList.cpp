@@ -274,6 +274,7 @@ struct Comparator {
     }  
 };
 
+// O(n log k)
 class SolutionMergeKLists {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
@@ -307,6 +308,7 @@ public:
     }
 };
 
+// O(n * k log k)
 class SolutionMerge2ListsIntuational {
 public:
     ListNode * merge2Lists(ListNode * a, ListNode * b) {
