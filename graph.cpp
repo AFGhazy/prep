@@ -189,6 +189,39 @@ int numIslands(vector<vector<char>>& grid) {
 }
 };
 
+enum State {
+    NOT_VISITED,
+    IN_PROGRESS,
+    DONE
+};
+
+class SolutionCanFinish {
+public:
+    bool isCyc(const int & u, vector<State> & vis, const vector<vector<int> > & g) {
+        if(vis[u] == DONE) return false;
+        if(vis[u] == IN_PROGRESS) return true;
+        
+        vis[u] = IN_PROGRESS;
+        for(auto v: g[u]) if(isCyc(v, vis, g)) return true;
+        vis[u] = DONE;
+        
+        return false;
+    }
+    
+    bool canFinish(int n, vector<vector<int>>& p) {
+        vector<vector<int> > g(n);
+        for(auto & v: p) {
+            g[v[0]].push_back(v[1]);
+        }
+        vector<State> vis(n, NOT_VISITED);
+        for(int i = 0; i < n; ++i) {
+            if(isCyc(i, vis, g))
+                return false;
+        }
+        return true;
+    }
+};
+
 
 int main() {
     vector<vector<string > > sol = SolutionFindLadders().findLadders("hit","cog",{"hot","dot","dog","lot","log","cog"});
