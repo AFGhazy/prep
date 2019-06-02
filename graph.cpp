@@ -159,6 +159,36 @@ public:
     }
 };
 
+class SolutionNumberOfIslands {
+public:
+    void fill(vector<vector<char>> & grid, int i, int j) {
+    int h = grid.size(), w = grid[0].size();
+
+    if(i < 0 || j < 0 || i == h || j == w || grid[i][j] == '0') return;
+
+    grid[i][j] = '0';
+
+    fill(grid, i + 1, j);
+    fill(grid, i - 1, j);
+    fill(grid, i, j + 1);
+    fill(grid, i, j - 1);
+}
+
+int numIslands(vector<vector<char>>& grid) {
+    if(grid.size() == 0) return 0;
+    
+    int h = grid.size(), w = grid[0].size(), count = 0;
+    for(int i = 0; i < h; ++i) {
+        for(int j = 0; j < w; ++j) {
+            if(grid[i][j] - '0') {
+                count++, fill(grid, i, j);
+            }
+        }
+    }
+    return count;
+}
+};
+
 
 int main() {
     vector<vector<string > > sol = SolutionFindLadders().findLadders("hit","cog",{"hot","dot","dog","lot","log","cog"});
