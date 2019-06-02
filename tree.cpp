@@ -152,6 +152,33 @@ public:
     }
 };
 
+
+class SolutionMaxPathSum {
+    const int INF = 1000 * 1000 * 1000;
+public:
+    int maxPathSum(TreeNode * cur, int & mx) {
+        if(!cur) return -INF;
+        
+        int l = maxPathSum(cur->left, mx);
+        int r = maxPathSum(cur->right, mx);
+        int val = cur->val;
+        
+        int mxSinglePath = max(val, val + max(l, r));
+        mx = max(mx, max(mxSinglePath, val + l + r));
+        
+        return mxSinglePath;
+    }
+    
+    int maxPathSum(TreeNode* cur) {
+        if(!cur) return 0;
+        int mx = cur->val;
+        maxPathSum(cur, mx);
+        return mx;
+    }
+    
+    
+};
+
 int main() {
 
 }
