@@ -247,8 +247,80 @@ public:
     }
 };
 
+class SolutionFindShortest {
+public:
+    
+    int findShortest(const int & sr, const int & sc, const int &dr, const int & dc, const int & d, 
+                        const vector<vector<int> > & f
+                     ) {
+        
+        queue<pair<pair<int,int>, int> > q;
+        int n = f.size();
+        int m = f[0].size();
+        vector<int> dx = {1, -1, 0, 0}, dy = {0, 0, 1, -1};
+        vector<vector<bool > > vis(n, vector<bool>(m, 0));
+        
+        q.push({{sr,sc}, d});
+    
+        while(!q.empty()) {    
+            int r = q.front().first.first;
+            int c = q.front().first.second;
+            int d = q.front().second;
+            q.pop();
+            
+            if(r < 0 || c < 0 || r >= n || c >= m || !f[r][c] || vis[r][c]) continue;
+
+            if(r == dr && c == dc) return d;
+            vis[r][c] = true;
+            
+            for(int i = 0; i < 4; ++i) {
+                int nr = r + dx[i];
+                int nc = c + dy[i];
+                q.push({{nr, nc}, d + 1});
+            }
+            
+        }
+        return -1;
+    }
+    
+    
+    int cutOffTree(vector<vector<int>>& f) {
+        int n = f.size();
+        if(n == 0) return 0;
+        int m = f[0].size();
+        vector<pair<int,int> > p;
+        
+        for(int i = 0; i < n; ++i) {
+            for(int j = 0; j < m; ++j) {
+                if(f[i][j] > 1) p.push_back({i, j});
+            }
+        }
+        
+        sort(p.begin(), p.end(), [&](const pair<int,int> & a, const pair<int,int> & b) -> bool {
+            return f[a.first][a.second] < f[b.first][b.second];
+        });
+        
+        
+        int idx = 0;
+        int sum = 0;
+        pair<int, int> cur = {0,0};
+        while(idx < p.size()) {
+            auto pp = p[idx];
+            int sp = findShortest(cur.first, cur.second, pp.first, pp.second, 0, f);
+            if(sp == -1) break;
+            
+            sum += sp;
+            
+//             cout << sum << " " << cur.first << " " << cur.second << endl;
+            
+            cur = p[idx++];
+        }
+        
+        return idx == p.size() ? sum : -1;
+    }
+};
+
 
 int main() {
-    vector<vector<string > > sol = SolutionFindLadders().findLadders("hit","cog",{"hot","dot","dog","lot","log","cog"});
-
+    
 }
