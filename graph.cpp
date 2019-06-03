@@ -250,33 +250,42 @@ public:
 class SolutionFindShortest {
 public:
     
-    int findShortest(const int & sr, const int & sc, const int &dr, const int & dc, const int & d, 
+    int findShortest(const int & sr, const int & sc, const int &dr, const int & dc, 
                         const vector<vector<int> > & f
                      ) {
-        
-        queue<pair<pair<int,int>, int> > q;
+        int d = 0;
+        queue<pair<int,int> > q;
         int n = f.size();
         int m = f[0].size();
-        vector<int> dx = {1, -1, 0, 0}, dy = {0, 0, 1, -1};
+        vector<int> dir = {-1, 0, 1, 0, -1};
         vector<vector<bool > > vis(n, vector<bool>(m, 0));
         
-        q.push({{sr,sc}, d});
+        if(sr == dr && sc == dc) return d;
+        
+        q.push({sr,sc});
+        vis[sr][sc] = true;
     
-        while(!q.empty()) {    
-            int r = q.front().first.first;
-            int c = q.front().first.second;
-            int d = q.front().second;
-            q.pop();
+        while(!q.empty()) {
             
-            if(r < 0 || c < 0 || r >= n || c >= m || !f[r][c] || vis[r][c]) continue;
+            int sz = q.size();
+            ++d;
+            
+            while(sz--) {
+            
+                int r = q.front().first;
+                int c = q.front().second;
+                q.pop();
 
-            if(r == dr && c == dc) return d;
-            vis[r][c] = true;
-            
-            for(int i = 0; i < 4; ++i) {
-                int nr = r + dx[i];
-                int nc = c + dy[i];
-                q.push({{nr, nc}, d + 1});
+                
+
+                for(int i = 0; i < 4; ++i) {
+                    int nr = r + dir[i];
+                    int nc = c + dir[i + 1];
+                    if(nr == dr && nc == dc) return d;
+                    if(nr < 0 || nc < 0 || nr >= n || nc >= m || vis[nr][nc] || !f[nr][nc]) continue;
+                    vis[nr][nc] = true;
+                    q.push({nr, nc});
+                }
             }
             
         }
@@ -306,7 +315,8 @@ public:
         pair<int, int> cur = {0,0};
         while(idx < p.size()) {
             auto pp = p[idx];
-            int sp = findShortest(cur.first, cur.second, pp.first, pp.second, 0, f);
+            int d = 0;
+            int sp = findShortest(cur.first, cur.second, pp.first, pp.second, f);
             if(sp == -1) break;
             
             sum += sp;
