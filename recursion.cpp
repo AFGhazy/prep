@@ -22,6 +22,26 @@ public:
     }
 };
 
+class Solution {
+public:
+    void gen(const int & n, const string & acc, const int & bal, vector<string> & ret) {
+        if(bal < 0) return;
+        if(acc.size() == n) {
+            if(!bal) ret.push_back(acc);
+            return;
+        }
+        
+        gen(n, acc + "(", bal + 1, ret);
+        gen(n, acc + ")", bal - 1, ret);
+    }
+    
+    vector<string> generateParenthesis(int n) {
+        vector<string> ret;
+        gen(n * 2, "", 0, ret);
+        return ret;
+    }
+};
+
 int main() {
 
 }
