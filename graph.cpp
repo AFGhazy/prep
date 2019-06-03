@@ -222,6 +222,31 @@ public:
     }
 };
 
+class SolutionFloodFill {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor, int oldColor = -1) {
+        int n = image.size();
+        if(n == 0) return image;
+        int m = image[0].size();
+        if(sr < 0 || sr >= n || sc < 0 || sc >= m) return image;
+        
+        if(newColor == image[sr][sc] || (oldColor != -1 && oldColor != image[sr][sc])) return image;
+        
+        
+        
+        if(oldColor == -1) oldColor = image[sr][sc];
+        
+        if(image[sr][sc] == oldColor) image[sr][sc] = newColor;
+        
+        floodFill(image, sr + 1, sc, newColor, oldColor);
+        floodFill(image, sr - 1, sc, newColor, oldColor);
+        floodFill(image, sr, sc + 1, newColor, oldColor);
+        floodFill(image, sr, sc - 1, newColor, oldColor);
+        
+        return image;
+    }
+};
+
 
 int main() {
     vector<vector<string > > sol = SolutionFindLadders().findLadders("hit","cog",{"hot","dot","dog","lot","log","cog"});
