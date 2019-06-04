@@ -658,6 +658,29 @@ bool wordBreak(string s, const vector<string> & dict) {
 }
 };
 
+class SolutionCoinChange {
+public:
+    int coinChange(vector<int>& coins, int amt) {
+        constexpr int INF = 1000 * 1000 * 1000;
+        vector<int> prev(amt + 1, 0), cur(amt + 1, INF);
+        
+        
+        int n = coins.size();
+        for(int i = 0; i < n; ++i) {
+            swap(cur, prev);
+            prev[0] = 0;
+            
+            for(int j = 0; j <= amt; ++j) {    
+                int & v = cur[j];
+                
+                v = prev[j];
+                if(j >= coins[i]) v = min(v, cur[j - coins[i]] + 1);
+            }
+        }
+        return cur[amt] != INF ? cur[amt] : -1;
+    }
+};
+
 int main() {
     test();
 }
