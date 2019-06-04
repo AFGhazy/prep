@@ -681,6 +681,80 @@ public:
     }
 };
 
+constexpr int SIZE = (1 << 7);
+
+struct Trie {
+    bool isWord;
+    Trie * next[SIZE];
+    
+    Trie() : isWord(false) {
+        memset(next, 0, sizeof next);
+    }
+    
+    void insert(const string & s, const int & idx) {
+        bool isWord = idx == s.length();
+        this->isWord |= isWord;
+        if(isWord) return;
+        if(!next[s[idx]]) next[s[idx]] = new Trie();
+        next[s[idx]]->insert(s, idx + 1);
+    }
+};
+
+class SolutionSolveWordBreakTrie {
+public:
+    
+bool solveWordBreak(vector<int> & dp, Trie * root, const string & s, const int & i, vector<vector<bool> > & sol) {
+    if(i == s.size()) return true;
+
+    int & found = dp[i];
+    if(found != -1) return found;
+            
+    found = 0;
+    Trie * curT = root;
+    
+    for(int j = i; j < s.size(); ++j) {
+        if(curT) curT = curT->next[s[j]];
+        if(curT && curT->isWord) {
+            bool cur = solveWordBreak(dp, root, s, j + 1, sol);
+            found |= cur;
+            sol[i][j] = cur;
+            // cout << "<<" << i << " " << j << " " << cur << endl;
+        }
+    }
+    return found;
+}
+
+bool wordBreak(string s, const vector<string> & dict) {
+    
+    vector<int> dp(s.length(), -1);
+    vector<vector<bool> > sol(s.length(), vector<bool>(s.length(), 0));
+    Trie * root = new Trie();
+    for(auto s: dict) root->insert(s, 0);
+    
+    bool ret = solveWordBreak(dp, root, s, 0, sol);
+    
+    int i = 0;
+    while(i < s.size()) {
+        int j = i + 1;
+        for(; j < s.size(); ++j) {
+            // cout << i << " " << j << " " << sol[i][j] << endl;
+            if(sol[i][j]) {
+                for(int ii = i; ii <= j; ++ii) {
+                    cout << s[ii];
+                }
+                cout << endl;
+                break;
+            }
+        }
+        i = j + 1;
+    }
+
+    
+    return ret;
+    
+}
+};
+
 int main() {
     test();
 }
