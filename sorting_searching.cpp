@@ -136,7 +136,7 @@ public:
     }
 };
 
-class Solution {
+class SolutionMinMeetingRooms {
 public:
     int minMeetingRooms(vector<vector<int>>& intervals) {
         sort(intervals.begin(), intervals.end());
@@ -153,7 +153,7 @@ public:
     }
 };
 
-class SolutionMinMeetingRooms {
+class SolutionMinMeetingRooms2 {
 public:
     int minMeetingRooms(vector<vector<int>>& intervals) {
         sort(intervals.begin(), intervals.end());
@@ -184,7 +184,7 @@ public:
     }
 };
 
-class Solution {
+class SolutionKClosest {
 public:
     vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
         vector<vector<int > > res;
@@ -199,6 +199,24 @@ public:
     }
 };
 
+template<class T>
+void quickSort(vector<T> & v, int l, int r) {
+    if(l >= r) return;
+
+    int pl = l, pr = r;
+    int cur = l;
+    int pivot = v[l];
+    while(cur <= r) {
+        if(v[cur] == pivot) cur++;
+        else if(v[cur] < pivot) swap(v[cur++], v[l++]);
+        else swap(v[r--], v[cur]);
+    }
+    quickSort(v, pl, l - 1);
+    quickSort(v, r + 1, pr);
+}
+
 int main() {
-    
+    vector<int> v = {1, 2, 3, 8, 2, 1, 1, 9, 0, 3, 7, 6, 1, 2, 3, 7, 9, 10, 5, 2, 1, 0, 4};
+    quickSort(v, 0, v.size() - 1);
+    copy(v.begin(), v.end(), ostream_iterator<int>(cout, " "));
 }
