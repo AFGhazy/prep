@@ -248,6 +248,87 @@ public:
  * int param_1 = obj->move(row,col,player);
  */
 
+constexpr int SIZE = (1 << 7);
+
+struct Trie {
+    int freq;
+    Trie * next[SIZE];
+    map<string, int> res;
+    
+    Trie() {
+        freq = 0;
+        memset(next, 0, sizeof next);
+    }
+    
+    int insert(const string & s, const int & idx, const int & df) {
+        if(idx == s.length()) { 
+            res[s] += df;
+            return res[s];
+        }
+        if(!next[s[idx]]) next[s[idx]] = new Trie();
+        
+        int freq = next[s[idx]]->insert(s, idx + 1, df);
+        res[s] = freq;
+        return freq;
+    }
+    
+    vector<string> explore(const string & s, const int & idx = 0) {
+        if(idx == s.length()) {
+            vector<string> v;
+            auto cmp = [](const pair<int, string> & a, const pair<int, string> & b) -> bool {
+                if(a.first == b.first) return a.second > b.second;
+                return a.first < b.first;
+            };
+            priority_queue<pair<int, string>, vector<pair<int, string> >, decltype(cmp) > pq(cmp);
+            for(auto p: res) {
+                pq.push({p.second, p.first});
+            }
+            int sz = min(3, (int)pq.size());
+            for(int i = 0; i < sz; ++i) {
+                v.push_back(pq.top().second);
+                pq.pop();
+            }
+            
+            return v;
+        }
+        
+        if(!next[s[idx]]) return {};
+        
+        return next[s[idx]]->explore(s, idx + 1);
+    }
+};
+
+class AutocompleteSystem {
+public:
+    string cur;
+    Trie * root;
+    
+    AutocompleteSystem(vector<string>& s, vector<int>& times) {
+        root = new Trie();
+        cur = "";
+        for(int i = 0; i < s.size(); ++i) {
+            root->insert(s[i], 0, times[i]);
+        }
+    }
+    
+    vector<string> input(char c) {
+        if(c == '#') {
+            root->insert(cur, 0, 1);
+            cur = "";
+            return {};
+        } else {
+            cur += string(1, c);
+            return root->explore(cur);
+        }
+    }
+};
+
+/**
+ * Your AutocompleteSystem object will be instantiated and called as such:
+ * AutocompleteSystem* obj = new AutocompleteSystem(sentences, times);
+ * vector<string> param_1 = obj->input(c);
+ */
+
 int main() {
     
 }
