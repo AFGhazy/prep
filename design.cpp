@@ -353,6 +353,44 @@ public:
     }
 };
 
+class FreqStackOpt {
+public:
+    unordered_map<int, int> freq;
+    unordered_map<int, stack<int> > s;
+    int mxFreq;
+    
+    
+    FreqStackOpt() {
+        mxFreq = 0;
+    }
+    
+    void push(int x) {
+        mxFreq = max(++freq[x], mxFreq);
+        s[freq[x]].push(x);
+    }
+    
+    int pop() {
+        int val = s[mxFreq].top();
+        s[mxFreq].pop();
+        if(s[freq[val]--].empty()) mxFreq--;
+        return val;
+    }
+};
+
+/**
+ * Your FreqStack object will be instantiated and called as such:
+ * FreqStack* obj = new FreqStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ */
+
+/**
+ * Your FreqStack object will be instantiated and called as such:
+ * FreqStack* obj = new FreqStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ */
+
 /**
  * Your FreqStack object will be instantiated and called as such:
  * FreqStack* obj = new FreqStack();
