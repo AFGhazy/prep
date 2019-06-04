@@ -124,6 +124,84 @@ public:
  * double param_2 = obj->findMedian();
  */
 
+
+struct TreeNode {
+     int val;
+     TreeNode *left;
+     TreeNode *right;
+     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+ 
+class Codec {
+public:
+    
+    string vToS(TreeNode * cur) {
+        if(!cur) return "-";
+        return to_string(cur->val);
+    }
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        queue<TreeNode * > q;
+        q.push(root);
+        string s = "";
+        while(!q.empty()) {
+            int sz = q.size();
+            string t = "";
+            bool nullLvl = true;
+            for(int i = 0; i < sz; ++i) {
+                if(t.size()) t += ",";
+                TreeNode * cur = q.front(); t += vToS(cur);
+                q.pop();
+                if(cur) {
+                    q.push(cur->left), q.push(cur->right);
+                    nullLvl &= (!cur->left && !cur->right);
+                }
+            }
+            s = s + (s.empty() ? "" : ",") + t;
+        }
+        cout << s << endl;
+        return s;
+    }
+    
+    TreeNode * sToN(string s) {
+        return s == "-" ? NULL : new TreeNode(atoi(s.c_str()));
+    }
+    
+    TreeNode * construct(const vector<string> & v) {
+        vector<TreeNode *> pre;
+        TreeNode * root = sToN(v[0]);
+        pre.push_back(root);
+        int idx = 1;
+        while(idx < v.size()) {
+            vector<TreeNode *> cur;
+            for(auto n: pre) {
+                n->left = sToN(v[idx++]);
+                n->right = sToN(v[idx++]);
+                if(n->left) cur.push_back(n->left);
+                if(n->right) cur.push_back(n->right);
+            }
+            swap(pre, cur);
+        }
+        return root;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        regex re(",");
+        vector<string> v {
+            sregex_token_iterator(data.begin(), data.end(), re, -1),
+            sregex_token_iterator()
+        };
+        
+        return construct(v);
+    }
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec;
+// codec.deserialize(codec.serialize(root));
+
 int main() {
     
 }
