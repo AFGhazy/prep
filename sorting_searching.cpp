@@ -35,6 +35,29 @@ public:
     }
 };
 
-int main() {
+class SolutionSearchRotated {
+public:
+    int search(vector<int>& nums, int target) {
+        int n = nums.size(), lshft = 0, hshft = n - 1, lo = 0, hi = n - 1;
+        if(!n) return -1;
+        
+        while(lshft < hshft) {
+            int i = (lshft + hshft) / 2;
+            
+            if(nums[i] < nums[0]) hshft = i; else lshft = i + 1;
+        }
+        if(nums[hshft] > nums[0]) ++hshft;
+        
+        while(lo < hi) {
+            int i = (lo + hi) / 2;
+            
+            if(nums[(i + hshft) % n] < target) lo = i + 1; else hi = i;
+        }
+        
+        return nums[(hi + hshft) % n] == target ? (hi + hshft) % n : -1;
+    }
+};
 
+int main() {
+    
 }
