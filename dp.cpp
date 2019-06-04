@@ -563,6 +563,21 @@ int maxSubArray(vector<int> v) {
 }
 };
 
+class SolutionMaxProfit {
+public:
+    int maxProfit(vector<int> & v) {
+    if(v.empty()) return 0;
+
+    int mxProfit = 0;
+    int mn = v[0];
+    for(int i =0; i < v.size(); ++i) {
+        mn = min(mn, v[i]);
+        mxProfit = max(v[i] - mn, mxProfit);
+    }
+    return mxProfit;
+}
+};
+
 int main() {
     test();
 }
