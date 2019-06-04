@@ -120,6 +120,9 @@ public:
     }
 };
 
+
+// https://leetcode.com/problems/kth-largest-element-in-an-array/discuss/60294/Solution-explained 
+// partial sort, nth element, 
 class SolutionFindKthLargestOpt {
 public:
     int findKthLargest(vector<int>& nums, int k) {
@@ -130,6 +133,38 @@ public:
             if(pq.size() > k) pq.pop();
         }
         return pq.top();
+    }
+};
+
+class Solution {
+public:
+    int minMeetingRooms(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end());
+        vector<int> rooms;
+        for(auto & i: intervals) {
+            int mn, idx = -1;
+            for(int j = 0; j < rooms.size(); ++j) {
+                if(idx == -1 || mn > rooms[j]) mn = rooms[j], idx = j;
+            }
+            if(idx == -1 || mn > i[0]) rooms.push_back(i[1]);
+            else rooms[idx] = i[1];
+        }
+        return rooms.size();
+    }
+};
+
+class SolutionMinMeetingRooms {
+public:
+    int minMeetingRooms(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end());
+        vector<int> rooms;
+        priority_queue<int, vector<int>, greater<int> > pq;
+        
+        for(auto & i: intervals) {
+            if(pq.size() && pq.top() <= i[0]) pq.pop();
+            pq.push(i[1]);
+        }
+        return pq.size();
     }
 };
 
