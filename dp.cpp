@@ -477,6 +477,25 @@ void test() {
     cout << minimumMessiness({"aaa", "bb", "cc", "ddddd"}, 6) << endl;
 }
 
+class SolutionLongestPalindrome {
+public:
+    string longestPalindrome(string s) {
+        int n = s.length();
+        if(n == 0) return "";
+        int si = 0, sl = 1;
+        for(int i = 0; i < n;) {
+            if(n - i <= sl / 2) break;
+            
+            int j = i, k = i;
+            while(k < n - 1 && s[k + 1] == s[k]) ++k;
+            i = k + 1;
+            while(j > 0 && k < n - 1 && s[j - 1] == s[k + 1]) --j, ++k;
+            if(k - j + 1 > sl) si = j, sl = (k - j + 1);
+        }
+        return s.substr(si, sl);
+    }
+};
+
 int main() {
     test();
 }
