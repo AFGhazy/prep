@@ -86,6 +86,44 @@ public:
  * int param_4 = obj->getMin();
  */
 
+class MedianFinder {
+public:
+    /** initialize your data structure here. */
+    priority_queue<int> fHalf;
+    priority_queue<int, vector<int>, greater<int> > sHalf;
+    
+    MedianFinder() {
+        
+    }
+    
+    void addNum(int num) {
+        if(fHalf.size() && fHalf.top() >= num) fHalf.push(num);
+        else sHalf.push(num);
+        
+        int n = fHalf.size(), m = sHalf.size();
+        if(m && n < m) fHalf.push(sHalf.top()), sHalf.pop();
+        else if(n && m < n - 1) sHalf.push(fHalf.top()), fHalf.pop();
+    }
+    
+    double findMedian() {
+        int n = fHalf.size() + sHalf.size();
+        
+        double ret = fHalf.top();
+        if(n & 1) {
+            return ret;
+        } else {
+            return (ret + sHalf.top()) / 2;
+        }
+    }
+};
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder* obj = new MedianFinder();
+ * obj->addNum(num);
+ * double param_2 = obj->findMedian();
+ */
+
 int main() {
     
 }
