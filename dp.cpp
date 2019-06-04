@@ -496,6 +496,73 @@ public:
     }
 };
 
+class SolutionLongestPlaindrome2 {
+public:
+    pair<int,int> expand(const string & s, int i, int j) {
+        while(0 <= i - 1 && j + 1 < s.size() && s[i - 1] == s[j + 1]) --i, ++j;
+        return {j - i + 1, i};
+    }
+    
+    string longestPalindrome(string s) {
+        int n = s.length();
+        if(n == 0) return "";
+        pair<int,int> mx = {1,0};
+        for(int i = 0; i < n; ++i) {
+            mx = max(mx, max(expand(s, i, i), expand(s, i + 1, i)));
+        }
+        return s.substr(mx.second, mx.first);
+    }
+};
+
+class SolutionMaxSubArray {
+public:
+    int maxSubArray(vector<int>& v) {
+        int mx = numeric_limits<int>::min();
+    int sum = 0;
+    for(int i = 0; i < v.size(); ++i) {
+        sum += v[i];
+        mx = max(sum, mx);
+        if(sum < 0) sum = 0;
+    }
+    return mx;
+    }
+};
+
+class SolutionDivideAndConquer {
+public:
+    int maxSubArray(const vector<int> & v, int start, int end) {
+    if(start > end) return v[end];
+    if(start == end) return v[start];
+
+    int mx = v[start];
+    int mid = (start + end) / 2;
+
+    mx = max(mx, maxSubArray(v, start, mid));
+    mx = max(mx, maxSubArray(v, mid + 1, end));
+
+    int lmx = v[mid];
+    int rmx = v[mid];
+    int cur = 0;
+    for(int i = mid; i >= start; --i) {
+        cur += v[i];
+        lmx = max(cur, lmx);
+    }
+
+    cur = 0;
+    for(int i = mid; i <= end; ++i) {
+        cur += v[i];
+        rmx = max(cur, rmx);
+    }
+
+
+    return max(mx, lmx + rmx - v[mid]);
+}
+
+int maxSubArray(vector<int> v) {
+    return maxSubArray(v, 0, v.size() - 1);
+}
+};
+
 int main() {
     test();
 }
