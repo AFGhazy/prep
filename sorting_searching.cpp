@@ -168,6 +168,23 @@ public:
     }
 };
 
-int main() {
+class SolutionTopKFrequent {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        int n = nums.size();
+        unordered_map<int,int> mp;
+        vector<vector<int> > bucket(n + 1);
+        for(auto i: nums) mp[i]++;
+        for(auto p: mp) bucket[p.second].push_back(p.first);
+        vector<int> sol;
+        for(int i = n; i > 0 && k > sol.size(); --i) {
+            sol.insert(sol.end(), bucket[i].begin(), bucket[i].end());
+        }
+        return sol;
+    }
+};
 
+
+int main() {
+    
 }
