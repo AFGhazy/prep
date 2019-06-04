@@ -202,6 +202,52 @@ public:
 // Codec codec;
 // codec.deserialize(codec.serialize(root));
 
+class TicTacToe {
+public:
+    static const int P_N = 2;
+    static const int B_SIZE = 3;
+    
+    vector<int> rows[P_N];
+    vector<int> cols[P_N];
+    int dig[P_N];
+    int adig[P_N];
+    int n;
+    
+    /** Initialize your data structure here. */
+    TicTacToe(int n) {
+        for(int i = 0; i < P_N; ++i) 
+            rows[i] = vector<int>(n, 0),
+            cols[i] = vector<int>(n, 0),
+            dig[i] = adig[i] = 0;
+        this->n = n;
+    }
+    
+    /** Player {player} makes a move at ({row}, {col}).
+        @param row The row of the board.
+        @param col The column of the board.
+        @param player The player, can be either 1 or 2.
+        @return The current winning condition, can be either:
+                0: No one wins.
+                1: Player 1 wins.
+                2: Player 2 wins. */
+    int move(int row, int col, int player) {
+        --player;
+        rows[player][row]++;
+        cols[player][col]++;
+        dig[player] += (row == col);
+        adig[player] += (row + col == n - 1);
+        
+        if(rows[player][row] == n || cols[player][col] == n || dig[player] == n || adig[player] == n) return player + 1;
+        return 0;
+    }
+};
+
+/**
+ * Your TicTacToe object will be instantiated and called as such:
+ * TicTacToe* obj = new TicTacToe(n);
+ * int param_1 = obj->move(row,col,player);
+ */
+
 int main() {
     
 }
