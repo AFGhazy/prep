@@ -96,6 +96,43 @@ public:
     }
 };
 
+class SolutionFindKthLargest {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        set<pair<int,int> > s;
+        for(int & i: nums) {
+            auto it = s.lower_bound({i, 0});
+            int cnt = 0;
+            if(it != s.end() && it->first == i) {
+                cnt = it->second;
+                s.erase(it);
+            }
+            s.insert({i, cnt + 1});
+            
+            if(k-- <= 0) {
+                cnt = s.begin()->second - 1;
+                int val = s.begin()->first;
+                s.erase(s.begin());
+                if(cnt) s.insert({val, cnt});
+            }
+        }
+        return s.begin()->first;
+    }
+};
+
+class SolutionFindKthLargestOpt {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        priority_queue<int, vector<int>, greater<int>> pq; // smallest on top
+        for (int i = 0; i < nums.size(); ++i) {
+            pq.push(nums[i]);
+            cout << pq.top() << endl;
+            if(pq.size() > k) pq.pop();
+        }
+        return pq.top();
+    }
+};
+
 int main() {
 
 }
