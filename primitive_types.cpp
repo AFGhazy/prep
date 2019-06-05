@@ -110,6 +110,27 @@ void test() {
     cout << checkConcatenatedSum(9, 1) << endl;
 }
 
+class SolutionReverseInteger {
+public:
+    int reverse(int x) {
+        bool neg = false;
+        if(neg) x *= -1, neg = true;
+        
+        long long ret = 0;
+        
+        while(x) {    
+            ret = ret * 10 + x % 10;
+            x /= 10;
+        }
+        
+        ret = (neg ? -1 : 1) * ret;
+        
+        if(ret < numeric_limits<int>::min() || ret > numeric_limits<int>::max()) return 0;
+        
+        return ret;
+    }
+};
+
 int main() {
     test();
 }
