@@ -793,6 +793,26 @@ public:
     }
 };
 
+class SolutionPartitionLabels {
+public:
+    vector<int> partitionLabels(string s) {
+        vector<int> ret;
+        int n = s.length();
+        vector<int> c((1 << 7), -1);
+        for(int i = n - 1; i >= 0; --i) {
+            if(c[s[i]] == -1) c[s[i]] = i;
+        }
+        int mx = 0;
+        int preIdx = -1;
+        for(int i = 0; i <= n; ++i) {
+            mx = max(mx, c[s[i]]);
+            if(i == mx) ret.push_back(i - preIdx), preIdx = i;
+        }
+        
+        return ret;
+    }
+};
+
 int main() {
     // cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
     string s = "abcdefg";
