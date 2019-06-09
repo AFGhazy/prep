@@ -813,6 +813,38 @@ public:
     }
 };
 
+class SolutionBackspaceCompare {
+public:
+    void parse(const string & s, stack<char> & st) {
+        for(auto c: s) {
+            if(c == '#') { if(st.size()) st.pop(); }
+            else st.push(c);
+        }
+    }
+    
+    bool backspaceCompare(string s, string t) {
+        stack<char> ss, tt;
+        parse(s, ss), parse(t, tt);
+        while(ss.size() && tt.size() && ss.top() == tt.top()) ss.pop(), tt.pop();
+        return ss.size() == tt.size() && ss.empty();
+    }
+};
+
+class SolutionBackspaceCompare {
+public:
+    void getToFirstChar(const string & s, int & i, int & b) {
+        while(i >= 0 && (s[i] == '#' || b)) b += (s[i] == '#' ? 1 : -1), --i;
+    }
+    
+    bool backspaceCompare(string s, string t) {
+        int bs = 0, bt = 0;
+        for(int i = s.length() - 1, j = t.length() - 1;;--i, --j) {
+            getToFirstChar(s, i, bs), getToFirstChar(t, j, bt);
+            if(i < 0 || j < 0 || s[i] != t[j]) return (i < 0 && j < 0);
+        }
+    }
+};
+
 int main() {
     // cout << lengthOfLongestSubstringTwoDistinct("aa") << endl;
     string s = "abcdefg";
