@@ -1,5 +1,7 @@
 package com.afghazy.mvvm.models
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -12,7 +14,7 @@ data class Game(
     }
 ) {
 
-    var winner: Player? = null
+    var winner: MutableLiveData<Player?> = MutableLiveData()
 
     fun gameStatus(): GameStatus {
         var sum = 0
@@ -23,7 +25,7 @@ data class Game(
         }
         if(sum == BOARD_SIZE * BOARD_SIZE) return GameStatus.DRAW
 
-        if(winner == null) return GameStatus.IN_PROGRESS
+        if(winner.value == null) return GameStatus.IN_PROGRESS
         return GameStatus.THERE_IS_A_WINNER
     }
 
@@ -50,6 +52,8 @@ data class Game(
     var role: Int = 0
         get() = field % 2
 
+    fun checkMove(x: Int, y: Int) = cells[x][y].isEmpty() && gameStatus() == GameStatus.IN_PROGRESS
+
     fun updateCell(x: Int, y: Int) {
         if(cells[x][y].isEmpty() && gameStatus() == GameStatus.IN_PROGRESS) {
             val token = players[role].token
@@ -64,7 +68,7 @@ data class Game(
                 || cols[token]?.get(y) == BOARD_SIZE
                 || mDig[token] == BOARD_SIZE
                 || aDig[token] == BOARD_SIZE) {
-                winner = players[role]
+                winner.value = players[role]
             }
 
             role++
