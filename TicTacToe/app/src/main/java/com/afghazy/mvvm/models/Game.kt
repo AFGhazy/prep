@@ -8,13 +8,32 @@ import kotlin.collections.HashMap
 data class Game(
     val players: List<Player> = List(PLAYERS_COUNT) { idx ->
         Player("P$idx", Token.getToken(idx))
-    },
-    val cells: MutableList<MutableList<Cell>> = MutableList(BOARD_SIZE) {
-        MutableList<Cell>(BOARD_SIZE) { Cell(null) }
     }
 ) {
 
+    private lateinit var rows: HashMap<Token, Array<Int>>
+    private lateinit var cols: HashMap<Token, Array<Int>>
+    private lateinit var mDig: HashMap<Token, Int>
+    private lateinit var aDig: HashMap<Token, Int>
+    private lateinit var cells: MutableList<MutableList<Cell>>
     var winner: MutableLiveData<Player?> = MutableLiveData()
+
+    init {
+        reset()
+    }
+
+    var role: Int = 0
+        get() = field % 2
+
+    fun reset() {
+        cells = getEmptyCellsTable()
+        rows = getEmptyHash()
+        cols = getEmptyHash()
+        mDig = getEmptyHashDig()
+        aDig = getEmptyHashDig()
+        winner.value = null
+        role = 0
+    }
 
     fun gameStatus(): GameStatus {
         var sum = 0
@@ -28,29 +47,6 @@ data class Game(
         if(winner.value == null) return GameStatus.IN_PROGRESS
         return GameStatus.THERE_IS_A_WINNER
     }
-
-    val rows = HashMap<Token, Array<Int>>().apply {
-        for(token in Token.values())
-            set(token, Array(BOARD_SIZE) { 0 })
-    }
-
-    val cols = HashMap<Token, Array<Int>>().apply {
-        for(token in Token.values())
-            set(token, Array(BOARD_SIZE) { 0 })
-    }
-
-    val mDig = HashMap<Token, Int>().apply {
-        for(token in Token.values())
-            set(Token.X, 0)
-    }
-
-    val aDig = HashMap<Token, Int>().apply {
-        for(token in Token.values())
-            set(Token.X, 0)
-    }
-
-    var role: Int = 0
-        get() = field % 2
 
     fun checkMove(x: Int, y: Int) = cells[x][y].isEmpty() && gameStatus() == GameStatus.IN_PROGRESS
 
@@ -78,5 +74,19 @@ data class Game(
     companion object {
         const val PLAYERS_COUNT = 2
         const val BOARD_SIZE = 3
+
+        fun getEmptyHash() = HashMap<Token, Array<Int>>().apply {
+            for(token in Token.values())
+                set(token, Array(BOARD_SIZE) { 0 })
+        }
+
+        fun getEmptyHashDig() = HashMap<Token, Int>().apply {
+            for(token in Token.values())
+                set(Token.X, 0)
+        }
+
+        fun getEmptyCellsTable() = MutableList(BOARD_SIZE) {
+            MutableList<Cell>(BOARD_SIZE) { Cell(null) }
+        }
     }
 }
