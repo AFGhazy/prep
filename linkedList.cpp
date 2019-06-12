@@ -334,6 +334,30 @@ public:
     }
 };
 
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class SolutionRemoveNthFromEnd {
+public:
+    ListNode* removeNthFromEnd(ListNode* cur, int & n) {
+        if(cur == NULL) return NULL;
+        
+        ListNode* next = removeNthFromEnd(cur->next, n);
+        --n;
+        if(n == 0) return next;
+        else {
+            cur->next = next;
+            return cur;
+        }
+    }
+};
+
 int main() {
     
 }
